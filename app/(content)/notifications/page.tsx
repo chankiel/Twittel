@@ -1,4 +1,3 @@
-import { TabsAll } from "@/components/ui/tabs"
 import { NotifCards } from "@/components/notifications/notif-cards"
 
 export default function Notifications(){

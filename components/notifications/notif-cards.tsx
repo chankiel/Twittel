@@ -1,9 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Button } from "../ui/button";
 
 export function NotifCard() {
   return (
-    <div className="flex items-center gap-2 border-y pl-5 py-3">
+    <div className="flex items-center gap-2 border-y px-4 py-3">
       <Avatar>
         <AvatarImage src="https://github.com/shadcn.png" />
         <AvatarFallback>CN</AvatarFallback>
@@ -18,7 +17,7 @@ export function NotifCard() {
 
 export function NotifCards() {
   return (
-    <div className="">
+    <div>
       <NotifCard />
       <NotifCard />
       <NotifCard />

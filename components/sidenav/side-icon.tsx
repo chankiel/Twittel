@@ -6,17 +6,17 @@ import { usePathname } from "next/navigation";
 interface sideIconProps {
   name: string;
   href: string;
-  Icon: React.ElementType;
-  ActiveIcon: React.ElementType;
+  Icon: React.ReactNode;
+  ActiveIcon: React.ReactNode;
 }
 export function SideIcon({name,href,Icon,ActiveIcon}: sideIconProps) {
   const pathname = usePathname();
 
   return (
-    <Link key={name} href={href} className="flex items-center h-[8%] gap-3 py-2 sm:py-0">
-      {pathname!==href && <Icon className="h-[40px] w-[40px]"/>}
-      {pathname===href && <ActiveIcon className="h-[40px] w-[40px]"/>}
-      <p className="hidden lg:block text-xl">{name}</p>
+    <Link key={name} href={href} className="flex items-center gap-3 py-2 sm:my-2 rounded-full hover:bg-gray-200 px-4">
+      {pathname!==href && Icon}
+      {pathname===href && ActiveIcon}
+      <p className={`hidden lg:block text-xl ${pathname===href ? "font-bold":""}`}>{name}</p>
     </Link>
   );
 }

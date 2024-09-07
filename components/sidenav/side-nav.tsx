@@ -68,7 +68,7 @@ export function SideNav({
     },
   ];
   return (
-    <div className="flex md:flex-col px-3 md:h-screen lg:w-[250px] items-end lg:items-start fixed sm:static z-20 bottom-0 w-full justify-around bg-white">
+    <div className="flex md:flex-col px-3 md:h-screen lg:w-[250px] items-end lg:items-start fixed sm:static z-20 bottom-0 justify-around bg-white">
       <Image
         src="/twitter.png"
         width={50}
@@ -82,8 +82,8 @@ export function SideNav({
             key={link.name}
             name={link.name}
             href={link.href}
-            Icon={link.icon}
-            ActiveIcon={link.activeIcon}
+            Icon={<link.icon className="sm:h-[40px] sm:w-[40px] h-[30px] w-[30px]"/>}
+            ActiveIcon={<link.activeIcon className="sm:h-[40px] sm:w-[40px] h-[30px] w-[30px]"/>}
           />
         );
       })}

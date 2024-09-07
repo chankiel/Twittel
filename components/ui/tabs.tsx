@@ -78,10 +78,10 @@ export const TabsAll = ({
   return (
     <Tabs defaultValue={firstValue} className="w-full">
       <TabsList className="w-full h-[50px]">
-        <TabsTrigger className="w-full h-full data-[state=active]:border-b-[6px] data-[state=active]:border-blue-500 " value={firstValue}>
+        <TabsTrigger className="font-bold text-lg w-full h-full data-[state=active]:border-b-[6px] data-[state=active]:border-blue-500 " value={firstValue}>
           {firstTrigger}
         </TabsTrigger>
-        <TabsTrigger className="w-full h-full data-[state=active]:border-b-[6px] data-[state=active]:border-blue-500" value={secondValue}>
+        <TabsTrigger className="font-bold text-lg w-full h-full data-[state=active]:border-b-[6px] data-[state=active]:border-blue-500" value={secondValue}>
           {secondTrigger}
         </TabsTrigger>
         {thirdTrigger && (
