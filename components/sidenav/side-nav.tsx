@@ -15,10 +15,17 @@ import {
   UserIcon as UserIconSolid,
 } from "@heroicons/react/24/solid";
 import { SideIcon } from "./side-icon";
-import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { TwitterLogoIcon } from "@radix-ui/react-icons"
+
 
 const links = [
+  {
+    name: "",
+    href: "/home",
+    icon: TwitterLogoIcon,
+    activeIcon: TwitterLogoIcon
+  },
   {
     name: "Home",
     href: "/home",
@@ -68,14 +75,7 @@ export function SideNav({
     },
   ];
   return (
-    <div className="flex md:flex-col px-3 md:h-screen lg:w-[250px] items-end lg:items-start fixed sm:static z-20 bottom-0 justify-around bg-white">
-      <Image
-        src="/twitter.png"
-        width={50}
-        height={50}
-        alt="twitter-icon"
-        className="mt-1 hidden md:block"
-      />
+    <div className="flex md:flex-col px-3 md:h-screen lg:w-[250px] items-end lg:items-start fixed sm:static z-20 bottom-0 justify-around">
       {linkWithProfile.map((link) => {
         return (
           <SideIcon
@@ -94,7 +94,7 @@ export function SideNav({
         </Avatar>
         <div className="hidden lg:block">
           <h1 className="font-bold">minasankonijiwa</h1>
-          <h2>@ngentotko</h2>
+          <h2>@hehehe</h2>
         </div>
       </div>
     </div>
