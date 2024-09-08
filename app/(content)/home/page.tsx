@@ -1,15 +1,23 @@
-import { TabsAll } from "@/components/ui/tabs";
+import { TabsAll } from "@/components/post/post-tabs";
 import { PostCards } from "@/components/post/post-cards";
 
 export default function Home() {
   return (
     <>
         <TabsAll
-          firstTrigger="Untuk Anda"
-          secondTrigger="Mengikuti"
-          FirstContent={<PostCards uploadAble={false} />}
-          SecondContent={<PostCards uploadAble={false} />}
-        ></TabsAll>
+        tabs={[
+          {
+            trigger: "Untuk Anda",
+            content: <PostCards uploadAble={true} />,
+            value: "first",
+          },
+          {
+            trigger: "Mengikuti",
+            content: <PostCards uploadAble={true} />,
+            value: "second",
+          },
+        ]}
+      />
     </>
   );
 }

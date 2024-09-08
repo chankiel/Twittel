@@ -1,6 +1,6 @@
 import { PostCards } from "@/components/post/post-cards";
 import { Button } from "@/components/ui/button";
-import { TabsAll } from "@/components/ui/tabs";
+import { TabsAll } from "@/components/post/post-tabs";
 import { ArrowLeftIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
@@ -26,7 +26,7 @@ export default function Profile() {
         <h1 className="text-2xl font-bold leading-none mt-8">
           minnasankonnijiwa
         </h1>
-        <p>@ngentotko</p>
+        <p>@hehehe</p>
         <div className="flex items-center my-3">
           <CalendarDaysIcon className="h-8" />
           <p>Joined July 2024</p>
@@ -41,11 +41,29 @@ export default function Profile() {
         </div>
       </div>
       <TabsAll
-        firstTrigger="Untuk Anda"
-        secondTrigger="Mengikuti"
-        FirstContent={<PostCards uploadAble={false} />}
-        SecondContent={<PostCards uploadAble={false} />}
-      ></TabsAll>
+        tabs={[
+          {
+            trigger: "Posts",
+            content: <PostCards uploadAble={false} />,
+            value: "posts",
+          },
+          {
+            trigger: "Replies",
+            content: <PostCards uploadAble={false} />,
+            value: "replies",
+          },
+          {
+            trigger: "Media",
+            content: <PostCards uploadAble={false} />,
+            value: "media",
+          },
+          {
+            trigger: "Likes",
+            content: <PostCards uploadAble={false} />,
+            value: "likes",
+          },
+        ]}
+      />
     </>
   );
 }

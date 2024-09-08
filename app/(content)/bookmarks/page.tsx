@@ -6,7 +6,7 @@ export default function Bookmarks() {
     <>
       <div className="py-1 ml-3">
         <h1 className="text-2xl font-bold leading-none">Bookmarks</h1>
-        <p>@ngentotko</p>
+        <p>@hehehe</p>
       </div>
       <Search placeholder="Search" className="ml-3"></Search>
       <PostCards uploadAble={false}/>
