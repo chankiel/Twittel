@@ -1,46 +1,27 @@
 import { PostCard } from "./post-card";
 import { PostInput } from "./post-input";
 import prisma from "@/lib/db";
+import { fetchPosts, type PostDataFormat, type FetchPostsOptions } from "@/lib/actions";
 
 interface PostCardsProps {
   uploadAble: boolean;
   placeholder?: string;
+  fetchOptions?: FetchPostsOptions;
 }
 
 export async function PostCards({
   uploadAble,
   placeholder = "What's happening?!",
+    fetchOptions = {}
 }: PostCardsProps) {
-  const cards = await prisma.post.findMany({
-    orderBy: {
-      datetime_post: "desc",
-    },
-    select: {
-      id: true,
-      content: true,
-      datetime_post:true,
-      author: {
-        select: {
-          username: true,
-          addname: true,
-        },
-      },
-      _count: {
-        select: { likedBy: true, bookmarkedBy: true, replies: true },
-      },
-    },
-  });
-
+    const cards = await fetchPosts(fetchOptions);
   return (
     <div>
       {uploadAble && <PostInput placeholder={placeholder} />}
       {cards.map((card) => {
-        return (
-          <PostCard
-            key={card.id}
-            post={card}
-          />
-        );
+        const isLiked = card.likedBy.length > 0;
+        const isBookmarked = card.bookmarkedBy.length > 0;
+        return <PostCard key={card.id} post={card} bookmarked={isBookmarked} liked={isLiked}/>;
       })}
     </div>
   );

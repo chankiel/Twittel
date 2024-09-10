@@ -5,37 +5,31 @@ import {
   BookmarkIcon,
   ShareIcon,
 } from "@heroicons/react/24/outline";
+import {
+  ChatBubbleLeftIcon as ChatBubbleLeftSolidIcon,
+  HeartIcon as HeartSolidIcon,
+  BookmarkIcon as BookmarkSolidIcon,
+} from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { PostOptions } from "./post-option";
-interface PostCardProps {
-  id: number;
-  content: string;
-  datetime_post: Date;
-  author: {
-    username: string;
-    addname: string;
-  };
-  _count: {
-    likedBy: number;
-    bookmarkedBy: number;
-    replies: number;
-  };
-}
+import PostAction from "./post-action";
+import type { PostDataFormat } from "@/lib/actions";
 
-export function PostCard({ post }: { post: PostCardProps }) {
+export function PostCard({ post, liked, bookmarked }: { post: PostDataFormat, liked:boolean, bookmarked:boolean }) {
   const now = new Date();
   let timeType = "s";
-  let diffTime = Math.floor((now.getTime() - post.datetime_post.getTime()) / 1000);
+  let diffTime = Math.floor(
+    (now.getTime() - post.datetime_post.getTime()) / 1000
+  );
   if (diffTime > 3600) {
     diffTime = Math.floor(diffTime / 3600);
     timeType = "j";
   } else if (diffTime > 60) {
     diffTime = Math.floor(diffTime / 60);
     timeType = "m";
-  } else if (diffTime==0){
+  } else if (diffTime == 0) {
     timeType = "now";
   }
-
   return (
     <div className="flex p-3 border-b relative">
       <PostOptions className="absolute right-4" post_id={post.id} />
@@ -47,7 +41,8 @@ export function PostCard({ post }: { post: PostCardProps }) {
         <h3 className="font-bold text-lg">
           {post.author.username}{" "}
           <span>
-            @{post.author.addname} . {timeType==="now"?"":diffTime}{timeType}
+            @{post.author.addname} . {timeType === "now" ? "" : diffTime}
+            {timeType}
           </span>
         </h3>
         <p className="mb-2">{post.content}</p>
@@ -58,20 +53,26 @@ export function PostCard({ post }: { post: PostCardProps }) {
           alt="image-post"
         /> */}
         <div className="flex h-6 mt-4">
-          <div className="w-full h-full flex items-center gap-[2px]">
-            <ChatBubbleLeftIcon className="max-h-full" />
+          <div className="w-full flex items-center gap-[4px]">
+            <PostAction type="like" post_id={post.id} user_id={1}>
+              <ChatBubbleLeftIcon className="max-h-full" />
+            </PostAction>
             <p>{post._count.replies}</p>
           </div>
-          <div className="w-full h-full flex items-center gap-[2px]">
-            <HeartIcon className="max-h-full" />
+          <div className="w-full flex items-center gap-[2px]">
+            <PostAction type="like" post_id={post.id} user_id={1}>
+              {liked ?  <HeartSolidIcon className="max-h-full" />:<HeartIcon className="max-h-full" />}
+            </PostAction>
             <p>{post._count.likedBy}</p>
           </div>
-          <div className="w-full h-full flex items-center gap-[2px]">
+          <button className="w-full h-full flex items-center gap-[2px]">
             <Image src={"/retweet.png"} width={24} height={24} alt="retweet" />
             <p>{post._count.bookmarkedBy}</p>
-          </div>
+          </button>
           <div className="w-full h-full flex  items-center justify-end gap-1">
-            <BookmarkIcon className="max-h-full" />
+            <PostAction type="bookmark" post_id={post.id} user_id={1}>
+            {bookmarked ? <BookmarkSolidIcon className="max-h-full" />:<BookmarkIcon className="max-h-full" />}
+            </PostAction>
             <ShareIcon className="max-h-full" />
           </div>
         </div>
@@ -80,13 +81,7 @@ export function PostCard({ post }: { post: PostCardProps }) {
   );
 }
 
-export function PostStatusCard({
-  post,
-  datetime_post,
-}: {
-  post: PostCardProps;
-  datetime_post: Date;
-}) {
+export function PostStatusCard({ post }: { post: PostDataFormat }) {
   return (
     <>
       <div className="flex p-3 relative">
