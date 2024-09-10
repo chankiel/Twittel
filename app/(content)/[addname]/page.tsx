@@ -12,7 +12,7 @@ export default function Profile() {
           <ArrowLeftIcon className="h-full" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold leading-none">minasankonijiwa</h1>
+          <h1 className="text-2xl font-bold leading-none">UserTwitter</h1>
           <p>0 posts</p>
         </div>
       </div>
@@ -24,7 +24,7 @@ export default function Profile() {
           <Button className="rounded-full font-bold">Edit Profile</Button>
         </div>
         <h1 className="text-2xl font-bold leading-none mt-8">
-          minnasankonnijiwa
+          UserTwitter
         </h1>
         <p>@hehehe</p>
         <div className="flex items-center my-3">

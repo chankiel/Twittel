@@ -22,7 +22,7 @@ export default function Search({ placeholder, className }: { placeholder: string
   };
 
   return (
-    <form className={cn("relative", "flex", "flex-1", "flex-shrink-0", "h-[50px]", "mt-1",className)} onSubmit={handleSearch}>
+    <form className={cn("relative", "flex", "flex-1", "flex-shrink-0", "h-[50px]", "pt-1",className)} onSubmit={handleSearch}>
       <label htmlFor="search" className="sr-only">
         Search
       </label>

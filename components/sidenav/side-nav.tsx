@@ -75,7 +75,7 @@ export function SideNav({
     },
   ];
   return (
-    <div className="flex md:flex-col px-3 md:h-screen lg:w-[250px] items-end lg:items-start fixed sm:static z-20 bottom-0 justify-around">
+    <div className="flex md:flex-col px-3 md:h-screen lg:w-[250px] items-end lg:items-start sm:sticky sm:top-0 fixed bottom-0 z-20 sm:bottom-auto justify-around bg-white sm:bg-background">
       {linkWithProfile.map((link) => {
         return (
           <SideIcon
@@ -93,7 +93,7 @@ export function SideNav({
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <div className="hidden lg:block">
-          <h1 className="font-bold">minasankonijiwa</h1>
+          <h1 className="font-bold">UserTwitter</h1>
           <h2>@hehehe</h2>
         </div>
       </div>
