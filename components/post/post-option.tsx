@@ -11,11 +11,18 @@ import {
   SpeakerXMarkIcon,
   UserMinusIcon,
   NoSymbolIcon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
+import { deletePost } from "@/lib/actions";
 
 export function PostOptions({
   className,
-}: React.HTMLAttributes<HTMLSpanElement>) {
+  post_id,
+}: {
+  className?: string;
+  post_id: number;
+}) {
+  const deletePostWithId = deletePost.bind(null, post_id);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className={cn(className)}>
@@ -27,6 +34,17 @@ export function PostOptions({
         ></Image>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
+        <DropdownMenuItem>
+          <form action={deletePostWithId} className="w-full">
+            <button
+              className="h-6 flex items-center gap-2 text-red-600 w-full"
+              type="submit"
+            >
+              <TrashIcon className="h-full" />
+              <p className="font-bold">Hapus</p>
+            </button>
+          </form>
+        </DropdownMenuItem>
         <DropdownMenuItem>
           <div className="h-6 flex items-center gap-2">
             <UserCircleIcon className="h-full" />
