@@ -1,18 +1,11 @@
 import Search from "@/components/parts/search-input";
-import { PostCard } from "@/components/post/post-card";
 import { PostCards } from "@/components/post/post-cards";
+import { fetchPostsBookmarked } from "@/lib/actions";
 
-
-export default function Bookmarks() {
+export default async function Bookmarks() {
   const userId = 1;
-  const fetchOption = {
-    where: {
-      bookmarkedBy: {
-        some: { id: userId },
-      },
-    },
-    orderBy: { datetime_post: 'desc' },
-  }
+  const fetchBookmarkWithId = fetchPostsBookmarked.bind(null,userId);
+
   return (
     <>
       <div className="py-1 ml-3">
@@ -20,7 +13,12 @@ export default function Bookmarks() {
         <p>@hehehe</p>
       </div>
       <Search placeholder="Search" className="ml-3"></Search>
-      <PostCards uploadAble={false} fetchOptions={fetchOption} />
+      <PostCards
+        uploadAble={false}
+        emptyHeading="Save post for later"
+        emptyPar="Bookmark posts so you can find them easily later"
+        fetchFunction={fetchBookmarkWithId}
+      />
     </>
   );
 }

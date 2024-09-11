@@ -2,7 +2,7 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { PostStatusCard } from "@/components/post/post-card";
 import { PostCards } from "@/components/post/post-cards";
-import { fetchPost } from "@/lib/actions";
+import { fetchPost, fetchPosts } from "@/lib/actions";
 import { notFound } from "next/navigation";
 
 export default async function Post({
@@ -18,10 +18,11 @@ export default async function Post({
       id: Number(params.id),
     },
   });
-
   if (!postData) {
     notFound();
   }
+  const isLiked = postData.likedBy.length > 0;
+  const isBookmarked = postData.bookmarkedBy.length > 0;
 
   return (
     <div>
@@ -33,8 +34,19 @@ export default async function Post({
           <h1 className="text-2xl font-bold">Post</h1>{" "}
         </div>
       </div>
-      <PostStatusCard post={postData} />
-      <PostCards uploadAble={true} placeholder="Post your reply" />
+      <PostStatusCard
+        post={postData}
+        liked={isLiked}
+        bookmarked={isBookmarked}
+      />
+
+      <PostCards
+        uploadAble={true}
+        placeholder="Post your reply"
+        emptyHeading="There's no reply at the moment"
+        emptyPar="Be the first to reply"
+        fetchFunction={fetchPosts}
+      />
     </div>
   );
 }

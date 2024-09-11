@@ -6,7 +6,6 @@ import {
   ShareIcon,
 } from "@heroicons/react/24/outline";
 import {
-  ChatBubbleLeftIcon as ChatBubbleLeftSolidIcon,
   HeartIcon as HeartSolidIcon,
   BookmarkIcon as BookmarkSolidIcon,
 } from "@heroicons/react/24/solid";
@@ -14,8 +13,13 @@ import Image from "next/image";
 import { PostOptions } from "./post-option";
 import PostAction from "./post-action";
 import type { PostDataFormat } from "@/lib/actions";
+import Link from "next/link";
 
-export function PostCard({ post, liked, bookmarked }: { post: PostDataFormat, liked:boolean, bookmarked:boolean }) {
+export function PostCard({
+  post,
+}: {
+  post: PostDataFormat;
+}) {
   const now = new Date();
   let timeType = "s";
   let diffTime = Math.floor(
@@ -30,8 +34,14 @@ export function PostCard({ post, liked, bookmarked }: { post: PostDataFormat, li
   } else if (diffTime == 0) {
     timeType = "now";
   }
+
+  const liked = post.likedBy.length>0;
+  const bookmarked = post.bookmarkedBy.length>0;
   return (
-    <div className="flex p-3 border-b relative">
+    <Link
+      className="flex p-3 border-b relative"
+      href={`/${post.author.addname}/status/${post.id}`}
+    >
       <PostOptions className="absolute right-4" post_id={post.id} />
       <Avatar>
         <AvatarImage src="https://github.com/shadcn.png" />
@@ -61,7 +71,11 @@ export function PostCard({ post, liked, bookmarked }: { post: PostDataFormat, li
           </div>
           <div className="w-full flex items-center gap-[2px]">
             <PostAction type="like" post_id={post.id} user_id={1}>
-              {liked ?  <HeartSolidIcon className="max-h-full" />:<HeartIcon className="max-h-full" />}
+              {liked ? (
+                <HeartSolidIcon className="max-h-full text-red-500" />
+              ) : (
+                <HeartIcon className="max-h-full hover:text-red-500 hover:bg-red-500 rounded-full hover:bg-opacity-30 hover:shadow-sm hover:shadow-red-500" />
+              )}
             </PostAction>
             <p>{post._count.likedBy}</p>
           </div>
@@ -71,17 +85,29 @@ export function PostCard({ post, liked, bookmarked }: { post: PostDataFormat, li
           </button>
           <div className="w-full h-full flex  items-center justify-end gap-1">
             <PostAction type="bookmark" post_id={post.id} user_id={1}>
-            {bookmarked ? <BookmarkSolidIcon className="max-h-full" />:<BookmarkIcon className="max-h-full" />}
+              {bookmarked ? (
+                <BookmarkSolidIcon className="max-h-full text-blue-600" />
+              ) : (
+                <BookmarkIcon className="max-h-full hover:text-blue-500 hover:bg-blue-500 rounded-full hover:bg-opacity-30 hover:shadow-sm hover:shadow-blue-500" />
+              )}
             </PostAction>
             <ShareIcon className="max-h-full" />
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
-export function PostStatusCard({ post }: { post: PostDataFormat }) {
+export function PostStatusCard({
+  post,
+  liked,
+  bookmarked,
+}: {
+  post: PostDataFormat;
+  liked: boolean;
+  bookmarked: boolean;
+}) {
   return (
     <>
       <div className="flex p-3 relative">
@@ -118,7 +144,13 @@ export function PostStatusCard({ post }: { post: PostDataFormat }) {
             <p>{post._count.replies}</p>
           </div>
           <div className="w-full h-full flex items-center gap-[2px]">
-            <HeartIcon className="max-h-full" />
+            <PostAction type="like" post_id={post.id} user_id={1}>
+              {liked ? (
+                <HeartSolidIcon className="max-h-full text-red-500" />
+              ) : (
+                <HeartIcon className="max-h-full hover:text-red-500 hover:bg-red-500 rounded-full hover:bg-opacity-30 hover:shadow-sm hover:shadow-red-500" />
+              )}
+            </PostAction>
             <p>{post._count.likedBy}</p>
           </div>
           <div className="w-full h-full flex items-center gap-[2px]">
@@ -126,7 +158,13 @@ export function PostStatusCard({ post }: { post: PostDataFormat }) {
             <p>2 rb</p>
           </div>
           <div className="w-full h-full flex items-center gap-[2px]">
-            <BookmarkIcon className="max-h-full" />
+            <PostAction type="bookmark" post_id={post.id} user_id={1}>
+              {bookmarked ? (
+                <BookmarkSolidIcon className="max-h-full text-blue-600" />
+              ) : (
+                <BookmarkIcon className="max-h-full hover:text-blue-500 hover:bg-blue-500 rounded-full hover:bg-opacity-30 hover:shadow-sm hover:shadow-blue-500" />
+              )}
+            </PostAction>
             <p>{post._count.bookmarkedBy}</p>
           </div>
           <div className="w-full h-full flex justify-end">

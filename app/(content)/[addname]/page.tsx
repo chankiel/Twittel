@@ -3,8 +3,13 @@ import { Button } from "@/components/ui/button";
 import { TabsAll } from "@/components/post/post-tabs";
 import { ArrowLeftIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { fetchPostsLiked, fetchPostsOwned } from "@/lib/actions";
 
-export default function Profile() {
+export default async function Profile() {
+  const userId = 1;
+  const fetchUserPostId = fetchPostsOwned.bind(null,userId);
+  const fetchPostLikedId = fetchPostsLiked.bind(null,userId);
+  
   return (
     <>
       <div className="flex items-center px-3 gap-7 py-1">
@@ -44,22 +49,22 @@ export default function Profile() {
         tabs={[
           {
             trigger: "Posts",
-            content: <PostCards uploadAble={false} />,
+            content: <PostCards uploadAble={false} fetchFunction={fetchUserPostId} />,
             value: "posts",
           },
           {
             trigger: "Replies",
-            content: <PostCards uploadAble={false} />,
+            content: <PostCards uploadAble={false} fetchFunction={fetchUserPostId} />,
             value: "replies",
           },
           {
             trigger: "Media",
-            content: <PostCards uploadAble={false} />,
+            content: <PostCards uploadAble={false} fetchFunction={fetchUserPostId}/>,
             value: "media",
           },
           {
             trigger: "Likes",
-            content: <PostCards uploadAble={false} />,
+            content: <PostCards uploadAble={false} fetchFunction={fetchPostLikedId} emptyPar="Like your first post so you can keep track your favorite posts here!"/>,
             value: "likes",
           },
         ]}
