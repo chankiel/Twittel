@@ -4,23 +4,81 @@ import { revalidatePath } from "next/cache";
 import prisma from "./db";
 
 export interface PostDataFormat {
+  id: number;
+  content: string;
+  datetime_post: Date;
+  author: {
+    username: string;
+    addname: string;
+  };
+  _count: {
+    likedBy: number;
+    bookmarkedBy: number;
+    replies: number;
+  };
+  likedBy: {
     id: number;
-    content: string;
-    datetime_post: Date;
-    author: {
-      username: string;
-      addname: string;
-    };
-    _count: {
-      likedBy: number;
-      bookmarkedBy: number;
-      replies: number;
-    };
-  }
+  }[];
+  bookmarkedBy: {
+    id: number;
+  }[];
+}
 
 export interface FetchPostsOptions {
   where?: object;
   orderBy?: object;
+}
+
+export async function fetchPostsLiked(userId: number) {
+  const posts = await fetchPosts({
+    where: {
+      likedBy: {
+        some: { id: userId },
+      },
+    },
+    orderBy: { datetime_post: "desc" },
+  });
+  return posts;
+}
+
+export async function fetchPostsBookmarked(userId: number) {
+  const posts = await fetchPosts({
+    where: {
+      bookmarkedBy: {
+        some: { id: userId },
+      },
+    },
+    orderBy: { datetime_post: "desc" },
+  });
+  return posts;
+}
+
+export async function fetchPostsOwned(userId: number) {
+  const posts = await fetchPosts({
+    where: {
+      author: {
+        id: userId,
+      },
+    },
+    orderBy: { datetime_post: "desc" },
+  });
+  return posts;
+}
+
+export async function fetchPostsFollowed(userId: number) {
+  const posts = await fetchPosts({
+    where: {
+      author: {
+        followedBy: {
+          some: {
+            id: userId,
+          },
+        },
+      },
+    },
+    orderBy: { datetime_post: "desc" },
+  });
+  return posts;
 }
 
 export async function fetchPosts(options: FetchPostsOptions = {}) {
@@ -44,11 +102,11 @@ export async function fetchPosts(options: FetchPostsOptions = {}) {
       },
       likedBy: {
         where: { id: 1 },
-        select: { id: true }, // Select only the id of the user
+        select: { id: true },
       },
       bookmarkedBy: {
         where: { id: 1 },
-        select: { id: true }, // Select only the id of the user
+        select: { id: true },
       },
     },
   });
@@ -57,29 +115,37 @@ export async function fetchPosts(options: FetchPostsOptions = {}) {
 }
 
 export async function fetchPost(options: FetchPostsOptions = {}) {
-    const { where, orderBy } = options;
-  
-    const post = await prisma.post.findFirst({
-      where: where || {},
-      orderBy: orderBy || { datetime_post: "desc" },
-      select: {
-        id: true,
-        content: true,
-        datetime_post: true,
-        author: {
-          select: {
-            username: true,
-            addname: true,
-          },
-        },
-        _count: {
-          select: { likedBy: true, bookmarkedBy: true, replies: true },
+  const { where, orderBy } = options;
+
+  const post = await prisma.post.findFirst({
+    where: where || {},
+    orderBy: orderBy || { datetime_post: "desc" },
+    select: {
+      id: true,
+      content: true,
+      datetime_post: true,
+      author: {
+        select: {
+          username: true,
+          addname: true,
         },
       },
-    });
-  
-    return post;
-  }
+      _count: {
+        select: { likedBy: true, bookmarkedBy: true, replies: true },
+      },
+      likedBy: {
+        where: { id: 1 },
+        select: { id: true },
+      },
+      bookmarkedBy: {
+        where: { id: 1 },
+        select: { id: true },
+      },
+    },
+  });
+
+  return post;
+}
 
 export async function createPost(formData: FormData) {
   await prisma.post.create({
