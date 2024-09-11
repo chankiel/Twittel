@@ -22,6 +22,7 @@ export async function PostCards({
   const posts = await fetchFunction();
   return (
     <div>
+      {uploadAble && <PostInput placeholder={placeholder} />}
       {posts.length === 0 && (
         <div className="flex mt-10">
           <div className="mx-auto w-1/2">
@@ -30,7 +31,6 @@ export async function PostCards({
           </div>
         </div>
       )}
-      {uploadAble && <PostInput placeholder={placeholder} />}
       {posts.map((post) => {
         return <PostCard key={post.id} post={post} />;
       })}
