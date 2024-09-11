@@ -1,10 +1,9 @@
 import { TabsAll } from "@/components/post/post-tabs";
 import { PostCards } from "@/components/post/post-cards";
-import { fetchPostsOwned, fetchPostsFollowed } from "@/lib/actions";
+import { fetchPosts, fetchPostsFollowed } from "@/lib/actions";
 
 export default function Home() {
   const userId = 1;
-  const fetchUserPostId = fetchPostsOwned.bind(null,userId);
   const fetchPostFollowedId = fetchPostsFollowed.bind(null,userId);
 
   return (
@@ -13,7 +12,7 @@ export default function Home() {
         tabs={[
           {
             trigger: "Untuk Anda",
-            content: <PostCards uploadAble={true} fetchFunction={fetchUserPostId}/>,
+            content: <PostCards uploadAble={true} fetchFunction={fetchPosts}/>,
             value: "first",
           },
           {
