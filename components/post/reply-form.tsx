@@ -37,8 +37,7 @@ export function ReplyForm({ parent_post }: ReplyFormProps) {
             <p className="text-slate-500">Membalas <span className="font-semibold text-blue-600">@{parent_post.author.addname}</span></p>
           </div>
         </div>
-        <PostInput placeholder="Posting balasan Anda" />
-
+        <PostInput placeholder="Posting balasan Anda" isReply={true}/>
       </DialogContent>
     </Dialog>
   );

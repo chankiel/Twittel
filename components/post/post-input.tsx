@@ -6,7 +6,7 @@ import { createPost } from "@/lib/actions";
 import { useState } from "react";
 import { FormFooter } from "./form-footer";
 
-export function PostInput({placeholder}:{placeholder:string}) {
+export function PostInput({placeholder, isReply=false}:{placeholder:string,isReply?:boolean}) {
   const [content, setContent] = useState("");
 
   return (
@@ -19,7 +19,7 @@ export function PostInput({placeholder}:{placeholder:string}) {
       </Avatar>
       <div className="w-full">
         <Textarea placeholder={placeholder} className="text-xl" name="content" value={content} onChange={(e)=> setContent(e.target.value)}/>
-        <FormFooter/>
+        <FormFooter isReply={isReply}/>
       </div>
     </form>
   );
