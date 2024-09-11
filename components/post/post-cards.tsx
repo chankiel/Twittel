@@ -20,8 +20,9 @@ export async function PostCards({
   emptyPar = "Share your status so people can see what youre up to now!",
 }: PostCardsProps) {
   const posts = await fetchFunction();
+  console.log(posts);
   return (
-    <div>
+    <div className="min-h-screen">
       {uploadAble && <PostInput placeholder={placeholder} />}
       {posts.length === 0 && (
         <div className="flex mt-10">
