@@ -38,9 +38,9 @@ export function PostCard({
   const liked = post.likedBy.length>0;
   const bookmarked = post.bookmarkedBy.length>0;
   return (
-    <Link
+    <div
       className="flex p-3 border-b relative"
-      href={`/${post.author.addname}/status/${post.id}`}
+      
     >
       <PostOptions className="absolute right-4" post_id={post.id} />
       <Avatar>
@@ -48,6 +48,7 @@ export function PostCard({
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <div className="ml-3 w-full">
+        <Link href={`/${post.author.addname}/status/${post.id}`}>
         <h3 className="font-bold text-lg">
           {post.author.username}{" "}
           <span>
@@ -56,6 +57,7 @@ export function PostCard({
           </span>
         </h3>
         <p className="mb-2">{post.content}</p>
+        </Link>
         {/* <Image
           src={"/imagepost-1.png"}
           width={300}
@@ -95,7 +97,7 @@ export function PostCard({
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 

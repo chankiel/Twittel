@@ -1,4 +1,3 @@
-"use client";
 import {toggleLike, toggleBookmark} from "@/lib/actions"
 
 interface PostActionProps{
@@ -23,9 +22,7 @@ export default function PostAction({
 
     return (
         <form className="w-[24px] h-full" action={postActionWithId}>
-            <button type="submit" className="w-full h-full" onClick={(e)=>{
-                e.stopPropagation();
-            }}>
+            <button type="submit" className="w-full h-full">
                 {children}
             </button>
         </form>
