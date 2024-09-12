@@ -1,9 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PostOptions } from "./post-option";
-import type { PostDataFormat } from "@/lib/actions";
+import { fetchPost, fetchPosts, type PostDataFormat } from "@/lib/actions";
 import Link from "next/link";
 import PostFooter from "./post-footer";
 import { diffNow } from "@/lib/utils";
+import { notFound } from "next/navigation";
 export function PostCard({
   post,
 }: {
@@ -43,11 +44,21 @@ export function PostCard({
   );
 }
 
-export function PostStatusCard({
-  post,
+export async function PostStatusCard({
+ post_id
 }: {
-  post: PostDataFormat;
+  post_id:number;
 }) {
+  const post = await fetchPost({
+    where: {
+      id: Number(post_id),
+    },
+  });
+  
+  if (!post) {
+    notFound();
+  }
+  
   return (
     <>
       <div className="flex p-3 relative">

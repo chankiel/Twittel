@@ -2,30 +2,18 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { PostStatusCard } from "@/components/post/post-card";
 import { PostCards } from "@/components/post/post-cards";
-import { fetchPost, fetchPosts } from "@/lib/actions";
-import { notFound } from "next/navigation";
+import { fetchPosts } from "@/lib/actions";
 
-export default async function Post({
+export default function Post({
   params,
 }: {
   params: { id: string; addname: string };
 }) {
-  const postData = await fetchPost({
-    where: {
-      id: Number(params.id),
-    },
-  });
-  
-  if (!postData) {
-    notFound();
-  }
-
   const fetchReplies = fetchPosts.bind(null,{
     where: {
       parent_id: Number(params.id),
     },
   })
-
   return (
     <div>
       <div className="flex items-center px-3 gap-7 py-4">
@@ -36,9 +24,7 @@ export default async function Post({
           <h1 className="text-2xl font-bold">Post</h1>{" "}
         </div>
       </div>
-      <PostStatusCard
-        post={postData}
-      />
+      <PostStatusCard post_id={Number(params.id)}/>
 
       <PostCards
         uploadAble={true}
