@@ -4,18 +4,16 @@ import type { PostDataFormat } from "@/lib/actions";
 import Link from "next/link";
 import PostFooter from "./post-footer";
 import { diffNow } from "@/lib/utils";
-
 export function PostCard({
   post,
 }: {
   post: PostDataFormat;
 }) {
   const diffTimeString = diffNow(post.datetime_post);
-
+  const parentPost_author = post.parentPost?.author.addname;
   return (
     <div
       className="flex p-3 border-b relative"
-      
     >
       <PostOptions className="absolute right-4" post_id={post.id} />
       <Avatar>
@@ -24,13 +22,14 @@ export function PostCard({
       </Avatar>
       <div className="ml-3 w-full">
         <Link href={`/${post.author.addname}/status/${post.id}`}>
-        <h3 className="font-bold text-lg">
+        <h3 className="font-bold text-lg leading-none">
           {post.author.username}{" "}
           <span>
             @{post.author.addname} . {diffTimeString}
           </span>
         </h3>
-        <p className="mb-2">{post.content}</p>
+        {parentPost_author && <h4 className="text-slate-500">Membalas <span className="text-blue-400">@{parentPost_author}</span></h4>}
+        <p className="mt-1">{post.content}</p>
         </Link>
         {/* <Image
           src={"/imagepost-1.png"}

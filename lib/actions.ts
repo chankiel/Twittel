@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import prisma from "./db";
 import { userId } from "./placeholder-data";
+
 export interface PostDataFormat {
   id: number;
   content: string;
@@ -22,6 +23,11 @@ export interface PostDataFormat {
   bookmarkedBy: {
     id: number;
   }[];
+  parentPost: {
+    author: {
+      addname: string;
+    };
+  } | null;
 }
 
 export interface FetchPostsOptions {
@@ -109,22 +115,32 @@ const selectQuery = {
   },
   likedBy: selectLikeAndBookmarkFields,
   bookmarkedBy: selectLikeAndBookmarkFields,
-  // replies: {
-  //   select: {
-  //     id: true,
-  //     content: true,
-  //     datetime_post: true,
-  //     author: {
-  //       select: selectUserFields,
-  //     },
-  //     _count: {
-  //       select: selectCountFields,
-  //     },
-  //     likedBy: selectLikeAndBookmarkFields,
-  //     bookmarkedBy: selectLikeAndBookmarkFields,
-  //   },
-  // },
+  parentPost: {
+    select: {
+      author: {
+        select: {
+          addname: true,
+        },
+      },
+    },
+  },
 };
+
+// replies: {
+//   select: {
+//     id: true,
+//     content: true,
+//     datetime_post: true,
+//     author: {
+//       select: selectUserFields,
+//     },
+//     _count: {
+//       select: selectCountFields,
+//     },
+//     likedBy: selectLikeAndBookmarkFields,
+//     bookmarkedBy: selectLikeAndBookmarkFields,
+//   },
+// },
 
 export async function fetchPosts(options: FetchPostsOptions = {}) {
   const { where, orderBy } = options;
@@ -134,6 +150,21 @@ export async function fetchPosts(options: FetchPostsOptions = {}) {
     orderBy: orderBy || { datetime_post: "desc" },
     select: selectQuery,
   });
+
+  // const post = await prisma.post.findMany({
+  //   select: {
+  //     parentPost: {
+  //       select: {
+  //         author: {
+  //           select: {
+  //             addname: true,
+  //           },
+  //         },
+  //       },
+  //     },
+  //     parent_id: true,
+  //   },
+  // });
 
   return posts;
 }
@@ -150,8 +181,7 @@ export async function fetchPost(options: FetchPostsOptions = {}) {
   return post;
 }
 
-
-export async function createPost(formData: FormData,parentId?: number) {
+export async function createPost(formData: FormData, parentId?: number) {
   await prisma.post.create({
     data: {
       content: formData.get("content") as string,
