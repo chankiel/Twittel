@@ -9,6 +9,7 @@ export default function Post({
 }: {
   params: { id: string; addname: string };
 }) {
+  const post_id = Number(params.id);
   const fetchReplies = fetchPosts.bind(null,{
     where: {
       parent_id: Number(params.id),
@@ -24,7 +25,7 @@ export default function Post({
           <h1 className="text-2xl font-bold">Post</h1>{" "}
         </div>
       </div>
-      <PostStatusCard post_id={Number(params.id)}/>
+      <PostStatusCard post_id={post_id}/>
 
       <PostCards
         uploadAble={true}
@@ -32,7 +33,7 @@ export default function Post({
         emptyHeading="There's no reply at the moment"
         emptyPar="Be the first to reply!"
         fetchFunction={fetchReplies}
-        parent_id={Number(params.id)}
+        parent_id={post_id}
       />
     </div>
   );
