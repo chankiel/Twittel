@@ -40,3 +40,5 @@ export const PostData = [
         retweet_count: 2000,
     },
 ]
+
+export const userId = 1;

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import prisma from "./db";
-
+import { userId } from "./placeholder-data";
 export interface PostDataFormat {
   id: number;
   content: string;
@@ -81,34 +81,58 @@ export async function fetchPostsFollowed(userId: number) {
   return posts;
 }
 
+const selectUserFields = {
+  username: true,
+  addname: true,
+};
+
+const selectCountFields = {
+  likedBy: true,
+  bookmarkedBy: true,
+  replies: true,
+};
+
+const selectLikeAndBookmarkFields = {
+  where: { id: userId },
+  select: { id: true },
+};
+
+const selectQuery = {
+  id: true,
+  content: true,
+  datetime_post: true,
+  author: {
+    select: selectUserFields,
+  },
+  _count: {
+    select: selectCountFields,
+  },
+  likedBy: selectLikeAndBookmarkFields,
+  bookmarkedBy: selectLikeAndBookmarkFields,
+  // replies: {
+  //   select: {
+  //     id: true,
+  //     content: true,
+  //     datetime_post: true,
+  //     author: {
+  //       select: selectUserFields,
+  //     },
+  //     _count: {
+  //       select: selectCountFields,
+  //     },
+  //     likedBy: selectLikeAndBookmarkFields,
+  //     bookmarkedBy: selectLikeAndBookmarkFields,
+  //   },
+  // },
+};
+
 export async function fetchPosts(options: FetchPostsOptions = {}) {
   const { where, orderBy } = options;
 
   const posts = await prisma.post.findMany({
     where: where || {},
     orderBy: orderBy || { datetime_post: "desc" },
-    select: {
-      id: true,
-      content: true,
-      datetime_post: true,
-      author: {
-        select: {
-          username: true,
-          addname: true,
-        },
-      },
-      _count: {
-        select: { likedBy: true, bookmarkedBy: true, replies: true },
-      },
-      likedBy: {
-        where: { id: 1 },
-        select: { id: true },
-      },
-      bookmarkedBy: {
-        where: { id: 1 },
-        select: { id: true },
-      },
-    },
+    select: selectQuery,
   });
 
   return posts;
@@ -120,38 +144,20 @@ export async function fetchPost(options: FetchPostsOptions = {}) {
   const post = await prisma.post.findFirst({
     where: where || {},
     orderBy: orderBy || { datetime_post: "desc" },
-    select: {
-      id: true,
-      content: true,
-      datetime_post: true,
-      author: {
-        select: {
-          username: true,
-          addname: true,
-        },
-      },
-      _count: {
-        select: { likedBy: true, bookmarkedBy: true, replies: true },
-      },
-      likedBy: {
-        where: { id: 1 },
-        select: { id: true },
-      },
-      bookmarkedBy: {
-        where: { id: 1 },
-        select: { id: true },
-      },
-    },
+    select: selectQuery,
   });
 
   return post;
 }
 
-export async function createPost(formData: FormData) {
+
+export async function createPost(formData: FormData,parentId?: number) {
   await prisma.post.create({
     data: {
       content: formData.get("content") as string,
-      author_id: 1,
+      author_id: userId,
+      parent_id: parentId,
+      ...(parentId !== undefined && { parent_id: parentId }),
     },
   });
   revalidatePath("/home");

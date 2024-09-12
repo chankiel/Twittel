@@ -12,17 +12,19 @@ export default async function Post({
 }) {
   const postData = await fetchPost({
     where: {
-      author: {
-        addname: params.addname,
-      },
       id: Number(params.id),
     },
   });
+  
   if (!postData) {
     notFound();
   }
-  const isLiked = postData.likedBy.length > 0;
-  const isBookmarked = postData.bookmarkedBy.length > 0;
+
+  const fetchReplies = fetchPosts.bind(null,{
+    where: {
+      parent_id: Number(params.id),
+    },
+  })
 
   return (
     <div>
@@ -36,16 +38,15 @@ export default async function Post({
       </div>
       <PostStatusCard
         post={postData}
-        liked={isLiked}
-        bookmarked={isBookmarked}
       />
 
       <PostCards
         uploadAble={true}
         placeholder="Post your reply"
         emptyHeading="There's no reply at the moment"
-        emptyPar="Be the first to reply"
-        fetchFunction={fetchPosts}
+        emptyPar="Be the first to reply!"
+        fetchFunction={fetchReplies}
+        parent_id={Number(params.id)}
       />
     </div>
   );
