@@ -2,12 +2,20 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
+  await prisma.post.deleteMany()
+  await prisma.user.deleteMany()
   await prisma.user.createMany({
     data: [
       {
         email: "hehe@gmail.com",
         username: "user",
         addname: "user",
+        birthdate: new Date("1990-01-01T00:00:00Z"),
+      },
+      {
+        email: "heho@gmail.com",
+        username: "user2",
+        addname: "user2",
         birthdate: new Date("1990-01-01T00:00:00Z"),
       },
     ],
