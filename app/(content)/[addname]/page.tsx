@@ -3,13 +3,13 @@ import { Button } from "@/components/ui/button";
 import { TabsAll } from "@/components/post/post-tabs";
 import { ArrowLeftIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { fetchPostsLiked, fetchPostsOwned } from "@/lib/actions";
+import { fetchPostsLiked, fetchPostsOwned, fetchRepliesOwned } from "@/lib/actions";
+import { userId } from "@/lib/placeholder-data";
 
 export default async function Profile() {
-  const userId = 1;
   const fetchUserPostId = fetchPostsOwned.bind(null,userId);
   const fetchPostLikedId = fetchPostsLiked.bind(null,userId);
-  
+  const fetchRepliesId = fetchRepliesOwned.bind(null,userId);
   return (
     <>
       <div className="flex items-center px-3 gap-7 py-1">
@@ -54,17 +54,17 @@ export default async function Profile() {
           },
           {
             trigger: "Replies",
-            content: <PostCards uploadAble={false} fetchFunction={fetchUserPostId} />,
+            content: <PostCards uploadAble={false} fetchFunction={fetchRepliesId} emptyHeading="No Replies yet" emptyPar="Reply your first post so you can keep track of your replies here!"/>,
             value: "replies",
           },
           {
             trigger: "Media",
-            content: <PostCards uploadAble={false} fetchFunction={fetchUserPostId}/>,
+            content: <div className="min-h-screen"></div>,
             value: "media",
           },
           {
             trigger: "Likes",
-            content: <PostCards uploadAble={false} fetchFunction={fetchPostLikedId} emptyPar="Like your first post so you can keep track your favorite posts here!"/>,
+            content: <PostCards uploadAble={false} fetchFunction={fetchPostLikedId} emptyHeading="No Likes yet" emptyPar="Like your first post so you can keep track your favorite posts here!"/>,
             value: "likes",
           },
         ]}
