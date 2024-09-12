@@ -28,6 +28,7 @@ export interface PostDataFormat {
       addname: string;
     };
   } | null;
+  parent_id: number | null;
 }
 
 export interface FetchPostsOptions {
@@ -124,6 +125,7 @@ const selectQuery = {
       },
     },
   },
+  parent_id: true,
 };
 
 // replies: {
@@ -141,6 +143,19 @@ const selectQuery = {
 //     bookmarkedBy: selectLikeAndBookmarkFields,
 //   },
 // },
+
+export async function fetchRepliesOwned(userId: number) {
+  const posts = await fetchPosts({
+    where:{
+      author_id: userId,
+      parent_id: {
+        not: null
+      }
+    },
+    orderBy: { datetime_post: "desc" },
+  });
+  return posts;
+}
 
 export async function fetchPosts(options: FetchPostsOptions = {}) {
   const { where, orderBy } = options;
