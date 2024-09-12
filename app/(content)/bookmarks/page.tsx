@@ -1,9 +1,8 @@
 import Search from "@/components/parts/search-input";
 import { PostCards } from "@/components/post/post-cards";
 import { fetchPostsBookmarked } from "@/lib/actions";
-
+import { userId } from "@/lib/placeholder-data";
 export default async function Bookmarks() {
-  const userId = 1;
   const fetchBookmarkWithId = fetchPostsBookmarked.bind(null,userId);
 
   return (
