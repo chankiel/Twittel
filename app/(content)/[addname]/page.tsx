@@ -3,13 +3,17 @@ import { Button } from "@/components/ui/button";
 import { TabsAll } from "@/components/post/post-tabs";
 import { ArrowLeftIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { fetchPostsLiked, fetchPostsOwned, fetchRepliesOwned } from "@/lib/actions";
+import {
+  fetchPostsLiked,
+  fetchPostsOwned,
+  fetchRepliesOwned,
+} from "@/lib/actions";
 import { userId } from "@/lib/placeholder-data";
 
-export default async function Profile() {
-  const fetchUserPostId = fetchPostsOwned.bind(null,userId);
-  const fetchPostLikedId = fetchPostsLiked.bind(null,userId);
-  const fetchRepliesId = fetchRepliesOwned.bind(null,userId);
+export default function Profile() {
+  const fetchUserPostId = fetchPostsOwned.bind(null, userId);
+  const fetchPostLikedId = fetchPostsLiked.bind(null, userId);
+  const fetchRepliesId = fetchRepliesOwned.bind(null, userId);
   return (
     <>
       <div className="flex items-center px-3 gap-7 py-1">
@@ -28,9 +32,7 @@ export default async function Profile() {
         <div className="flex justify-end">
           <Button className="rounded-full font-bold">Edit Profile</Button>
         </div>
-        <h1 className="text-2xl font-bold leading-none mt-8">
-          UserTwitter
-        </h1>
+        <h1 className="text-2xl font-bold leading-none mt-8">UserTwitter</h1>
         <p>@hehehe</p>
         <div className="flex items-center my-3">
           <CalendarDaysIcon className="h-8" />
@@ -49,12 +51,21 @@ export default async function Profile() {
         tabs={[
           {
             trigger: "Posts",
-            content: <PostCards uploadAble={false} fetchFunction={fetchUserPostId} />,
+            content: (
+              <PostCards uploadAble={false} fetchFunction={fetchUserPostId} />
+            ),
             value: "posts",
           },
           {
             trigger: "Replies",
-            content: <PostCards uploadAble={false} fetchFunction={fetchRepliesId} emptyHeading="No Replies yet" emptyPar="Reply your first post so you can keep track of your replies here!"/>,
+            content: (
+              <PostCards
+                uploadAble={false}
+                fetchFunction={fetchRepliesId}
+                emptyHeading="No Replies yet"
+                emptyPar="Reply your first post so you can keep track of your replies here!"
+              />
+            ),
             value: "replies",
           },
           {
@@ -64,7 +75,14 @@ export default async function Profile() {
           },
           {
             trigger: "Likes",
-            content: <PostCards uploadAble={false} fetchFunction={fetchPostLikedId} emptyHeading="No Likes yet" emptyPar="Like your first post so you can keep track your favorite posts here!"/>,
+            content: (
+              <PostCards
+                uploadAble={false}
+                fetchFunction={fetchPostLikedId}
+                emptyHeading="No Likes yet"
+                emptyPar="Like your first post so you can keep track your favorite posts here!"
+              />
+            ),
             value: "likes",
           },
         ]}
