@@ -31,11 +31,11 @@ model Post {
   id            Int      @id @default(autoincrement())
   content       String
   datetime_post DateTime @default(now())
-  author        User     @relation("posted", fields: [author_id], references: [id])
+  author        User     @relation("posted", fields: [author_id], references: [id],onDelete: Cascade)
   author_id     Int
   likedBy       User[]   @relation("liked")
   bookmarkedBy  User[]
   replies       Post[]   @relation("replied")
-  parentPost    Post?    @relation("replied", fields: [parent_id], references: [id])
+  parentPost    Post?    @relation("replied", fields: [parent_id], references: [id],onDelete: Cascade)
   parent_id     Int?
 }
