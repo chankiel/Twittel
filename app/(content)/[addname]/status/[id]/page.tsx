@@ -1,8 +1,9 @@
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { PostStatusCard } from "@/components/post/post-card";
+import { PostCardSkeletons, PostStatusCard } from "@/components/post/post-card";
 import { PostCards } from "@/components/post/post-cards";
 import { fetchPosts } from "@/lib/actions";
+import { Suspense } from "react";
 
 export default function Post({
   params,
@@ -26,7 +27,7 @@ export default function Post({
         </div>
       </div>
       <PostStatusCard post_id={post_id}/>
-
+      <Suspense fallback={<PostCardSkeletons uploadAble={true} placeholder={"Post your reply"}/>}>
       <PostCards
         uploadAble={true}
         placeholder="Post your reply"
@@ -35,6 +36,7 @@ export default function Post({
         fetchFunction={fetchReplies}
         parent_id={post_id}
       />
+      </Suspense>
     </div>
   );
 }

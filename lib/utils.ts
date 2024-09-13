@@ -23,3 +23,21 @@ export function diffNow(datetime_post:Date){
   const diffString = (timeType==="now" ? timeType:diffTime+timeType) 
   return diffString;
 }
+
+export const formatDate = (date: Date): string => {
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  };
+  const formattedTime = date.toLocaleString('en-US', timeOptions);
+
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  };
+  const formattedDate = date.toLocaleString('en-US', dateOptions);
+
+  return `${formattedTime} · ${formattedDate}`;
+};

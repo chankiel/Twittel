@@ -3,62 +3,102 @@ import { PostOptions } from "./post-option";
 import { fetchPost, type PostDataFormat } from "@/lib/actions";
 import Link from "next/link";
 import PostFooter from "./post-footer";
-import { diffNow } from "@/lib/utils";
+import { diffNow, formatDate } from "@/lib/utils";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
+import { PostInput } from "./post-input";
 
-export function PostCard({
+export function PostCardSkeleton() {
+  return (
+    <div className="flex space-x-2 p-3 border-b">
+      <Skeleton className="h-12 w-12 rounded-full" />
+      <div className="space-y-2 flex-grow">
+        <Skeleton className="h-4 w-1/3" />
+        <Skeleton className="h-4 w-1/6" />
+        <Skeleton className="h-20 my-1 w-full" />
+      </div>
+    </div>
+  );
+}
+
+export function PostCardSkeletons({uploadAble=false, placeholder="What's happening!?"}:{uploadAble?:boolean;placeholder?:string}) {
+  return (
+    <>
+      {uploadAble && <PostInput placeholder={placeholder} />}
+      {Array.from({ length: 4 }).map((_, index) => (
+        <PostCardSkeleton key={index} />
+      ))}
+    </>
+  );
+}
+
+export async function PostCard({
   post,
-  showBorder = true,
-  showVertLine = false,
+  isParentPost = false,
+  isReplySeq = false,
 }: {
   post: PostDataFormat;
-  showBorder?: boolean;
-  showVertLine?: boolean;
+  isParentPost?: boolean;
+  isReplySeq?: boolean;
 }) {
   const diffTimeString = diffNow(post.datetime_post);
   const parentPost_author = post.parentPost?.author.addname;
+  let parent_post: PostDataFormat | null = null;
+  if (isReplySeq && post.parent_id) {
+    parent_post = await fetchPost({
+      where: {
+        id: post.parent_id,
+      },
+    });
+  }
+
   return (
-    <div className={`flex p-3 ${showBorder ? "border-b" : ""} relative`}>
-      <PostOptions className="absolute right-4" post_id={post.id} />
-      <div className="flex flex-col items-center">
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-        {showVertLine && (
-          <Image
-            src={"/vert-line.png"}
-            alt="vert-line"
-            width={10}
-            height={150}
-            className="h-full"
-          />
-        )}
-      </div>
-      <div className="ml-3 w-full">
-        <Link href={`/${post.author.addname}/status/${post.id}`}>
-          <h3 className="font-bold text-lg leading-none">
-            {post.author.username}{" "}
-            <span>
-              @{post.author.addname} . {diffTimeString}
-            </span>
-          </h3>
-          {parentPost_author && (
-            <h4 className="text-slate-500">
-              Membalas{" "}
-              <span className="text-blue-400">@{parentPost_author}</span>
-            </h4>
+    <div className={`${isReplySeq || !isParentPost ? "border-b py-3" : ""}`}>
+      {isReplySeq && parent_post && (
+        <PostCard post={parent_post} isParentPost={true} />
+      )}
+      <div className={`flex px-3 relative`}>
+        <PostOptions className="absolute right-4" post_id={post.id} />
+        <div className="flex flex-col items-center">
+          <Avatar>
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          {isParentPost && (
+            <Image
+              src={"/vert-line.png"}
+              alt="vert-line"
+              width={10}
+              height={150}
+              className="h-full"
+            />
           )}
-          <p className="mt-1">{post.content}</p>
-        </Link>
-        {/* <Image
+        </div>
+        <div className="ml-3 w-full">
+          <Link href={`/${post.author.addname}/status/${post.id}`}>
+            <h3 className="font-bold text-lg leading-none">
+              {post.author.username}{" "}
+              <span>
+                @{post.author.addname} · {diffTimeString}
+              </span>
+            </h3>
+            {parentPost_author && (
+              <h4 className="text-slate-500">
+                Membalas{" "}
+                <span className="text-blue-400">@{parentPost_author}</span>
+              </h4>
+            )}
+            <p className="mt-1">{post.content}</p>
+          </Link>
+          {/* <Image
           src={"/imagepost-1.png"}
           width={300}
           height={300}
           alt="image-post"
         /> */}
-        <PostFooter post={post} />
+          <PostFooter post={post} isParentStatus={isParentPost} />
+        </div>
       </div>
     </div>
   );
@@ -67,9 +107,7 @@ export function PostCard({
 export async function PostParentCard({ post_id }: { post_id: number }) {
   const parentArr: PostDataFormat[] = [];
   let currentId: number | null | undefined = post_id;
-  console.log(currentId);
   while (currentId !== null) {
-    console.log(currentId);
     const postData = await fetchPost({
       where: {
         id: currentId,
@@ -83,14 +121,7 @@ export async function PostParentCard({ post_id }: { post_id: number }) {
   return (
     <div>
       {[...parentArr].reverse().map((post) => {
-        return (
-          <PostCard
-            post={post}
-            key={post.id}
-            showBorder={false}
-            showVertLine={true}
-          />
-        );
+        return <PostCard post={post} key={post.id} isParentPost={true} />;
       })}
     </div>
   );
@@ -106,11 +137,11 @@ export async function PostStatusCard({ post_id }: { post_id: number }) {
   if (!post) {
     notFound();
   }
-
+  const stringDate = formatDate(post.datetime_post);
   return (
     <>
       {post.parent_id && <PostParentCard post_id={post.parent_id} />}
-      <div className="flex p-3 relative">
+      <div className="flex px-3 relative">
         <PostOptions className="absolute right-4" post_id={post.id} />
         <Avatar>
           <AvatarImage src="https://github.com/shadcn.png" />
@@ -124,7 +155,7 @@ export async function PostStatusCard({ post_id }: { post_id: number }) {
         </div>
       </div>
       <div className="px-4">
-        <p className="mb-2 font-medium">{post.content}</p>
+        <p className=" my-2 font-medium">{post.content}</p>
         {/* <div className="flex justify-center">
           <Image
             src={"/imagepost-1.png"}
@@ -135,7 +166,7 @@ export async function PostStatusCard({ post_id }: { post_id: number }) {
           />
         </div> */}
         <p className="my-3">
-          4:59 AM . Sep 8, 2024 . <span className="font-bold">1,8M</span> Views
+          {stringDate}. <span className="font-bold">1,8M</span> Views
         </p>
         <hr />
         <PostFooter post={post} isStatus={true}></PostFooter>

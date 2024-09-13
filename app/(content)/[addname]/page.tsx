@@ -9,6 +9,8 @@ import {
   fetchRepliesOwned,
 } from "@/lib/actions";
 import { userId } from "@/lib/placeholder-data";
+import { Suspense } from "react";
+import { PostCardSkeletons } from "@/components/post/post-card";
 
 export default function Profile() {
   const fetchUserPostId = fetchPostsOwned.bind(null, userId);
@@ -52,19 +54,24 @@ export default function Profile() {
           {
             trigger: "Posts",
             content: (
-              <PostCards uploadAble={false} fetchFunction={fetchUserPostId} />
+              <Suspense fallback={<PostCardSkeletons />}>
+                <PostCards uploadAble={false} fetchFunction={fetchUserPostId} />
+              </Suspense>
             ),
             value: "posts",
           },
           {
             trigger: "Replies",
             content: (
-              <PostCards
-                uploadAble={false}
-                fetchFunction={fetchRepliesId}
-                emptyHeading="No Replies yet"
-                emptyPar="Reply your first post so you can keep track of your replies here!"
-              />
+              <Suspense fallback={<PostCardSkeletons />}>
+                <PostCards
+                  uploadAble={false}
+                  fetchFunction={fetchRepliesId}
+                  emptyHeading="No Replies yet"
+                  emptyPar="Reply your first post so you can keep track of your replies here!"
+                  isReplySeq={true}
+                />
+              </Suspense>
             ),
             value: "replies",
           },
@@ -76,12 +83,14 @@ export default function Profile() {
           {
             trigger: "Likes",
             content: (
-              <PostCards
-                uploadAble={false}
-                fetchFunction={fetchPostLikedId}
-                emptyHeading="No Likes yet"
-                emptyPar="Like your first post so you can keep track your favorite posts here!"
-              />
+              <Suspense fallback={<PostCardSkeletons />}>
+                <PostCards
+                  uploadAble={false}
+                  fetchFunction={fetchPostLikedId}
+                  emptyHeading="No Likes yet"
+                  emptyPar="Like your first post so you can keep track your favorite posts here!"
+                />
+              </Suspense>
             ),
             value: "likes",
           },

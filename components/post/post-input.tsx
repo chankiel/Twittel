@@ -6,7 +6,7 @@ import { createPost } from "@/lib/actions";
 import { useState } from "react";
 import { FormFooter } from "./form-footer";
 
-export function PostInput({ placeholder, parent_id = -1,isModal = false }: { placeholder?: string; parent_id: number, isModal?:boolean }) {
+export function PostInput({ placeholder, parent_id = -1,isModal = false }: { placeholder?: string; parent_id?: number, isModal?:boolean }) {
   const [content, setContent] = useState("");
   const isReply = parent_id !== -1;
   const isReplyModal = isReply && isModal;
