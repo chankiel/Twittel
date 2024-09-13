@@ -15,23 +15,26 @@ import { PostDataFormat } from "@/lib/actions";
 interface PostFooterProps {
   post: PostDataFormat;
   isStatus?: boolean;
+  isParentStatus?: boolean;
 }
 
 export default function PostFooter({
   post,
   isStatus = false,
+  isParentStatus = false,
 }: PostFooterProps) {
   const liked = post.likedBy.length > 0;
   const bookmarked = post.bookmarkedBy.length > 0;
   return (
-    <div className="flex h-6 mt-4">
-      <div className="w-full flex items-center gap-[4px]">
+    // flex h-6 mt-4
+    <div className={`flex h-6 ${isParentStatus ? "mb-3 mt-1":"mt-4"}`}>
+      <div className="flex-grow flex items-center gap-[4px]">
         <PostAction type="reply" post_id={post.id} user_id={1}>
           <ReplyForm parent_post={post} />
         </PostAction>
         <p>{post._count.replies}</p>
       </div>
-      <div className="w-full flex items-center gap-[2px]">
+      <div className="flex-grow flex items-center gap-[2px]">
         <PostAction type="like" post_id={post.id} user_id={1}>
           {liked ? (
             <HeartSolidIcon className="max-h-full text-red-500" />
@@ -41,25 +44,14 @@ export default function PostFooter({
         </PostAction>
         <p>{post._count.likedBy}</p>
       </div>
-      <button className="w-full flex items-center gap-[2px]">
+      <button className="flex-grow flex items-center gap-[2px]">
         <Image src={"/retweet.png"} width={24} height={24} alt="retweet" />
-        <p>{post._count.bookmarkedBy}</p>
+        <p>{0}</p>
       </button>
-      {!isStatus && (
-        <div className="w-full h-full flex  items-center justify-end gap-1">
-          <PostAction type="bookmark" post_id={post.id} user_id={1}>
-            {bookmarked ? (
-              <BookmarkSolidIcon className="max-h-full text-blue-600" />
-            ) : (
-              <BookmarkIcon className="max-h-full hover:text-blue-500 hover:bg-blue-500 rounded-full hover:bg-opacity-30 hover:shadow-sm hover:shadow-blue-500" />
-            )}
-          </PostAction>
-          <ShareIcon className="max-h-full" />
-        </div>
-      )}
-      {isStatus && (
+
+      {isStatus ? (
         <>
-          <div className="w-full h-full flex items-center gap-[2px]">
+          <div className="flex-grow h-full flex items-center gap-[2px]">
             <PostAction type="bookmark" post_id={post.id} user_id={1}>
               {bookmarked ? (
                 <BookmarkSolidIcon className="max-h-full text-blue-600" />
@@ -69,10 +61,21 @@ export default function PostFooter({
             </PostAction>
             <p>{post._count.bookmarkedBy}</p>
           </div>
-          <div className="w-full h-full flex justify-end">
+          <div className="h-full flex justify-end">
             <ShareIcon className="max-h-full" />
           </div>
         </>
+      ) : (
+        <div className="h-full flex items-center justify-end gap-1">
+          <PostAction type="bookmark" post_id={post.id} user_id={1}>
+            {bookmarked ? (
+              <BookmarkSolidIcon className="h-full text-blue-600" />
+            ) : (
+              <BookmarkIcon className="h-full hover:text-blue-500 hover:bg-blue-500 rounded-full hover:bg-opacity-30 hover:shadow-sm hover:shadow-blue-500" />
+            )}
+          </PostAction>
+          <ShareIcon className="h-full" />
+        </div>
       )}
     </div>
   );

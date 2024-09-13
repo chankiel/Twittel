@@ -11,6 +11,7 @@ interface PostCardsProps {
   emptyHeading?: string;
   emptyPar?: string;
   parent_id?:number;
+  isReplySeq?:boolean;
 }
 
 export async function PostCards({
@@ -20,6 +21,7 @@ export async function PostCards({
   emptyHeading = "No Posts",
   emptyPar = "Share your status so people can see what youre up to now!",
   parent_id=-1,
+  isReplySeq=false,
 }: PostCardsProps) {
   const posts = await fetchFunction();
   return (
@@ -34,7 +36,7 @@ export async function PostCards({
         </div>
       )}
       {posts.map((post) => {
-        return <PostCard key={post.id} post={post} />;
+        return <PostCard key={post.id} post={post} isReplySeq={isReplySeq}/>;
       })}
     </div>
   );
