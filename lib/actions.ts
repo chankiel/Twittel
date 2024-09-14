@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import prisma from "./db";
 import { userId } from "./placeholder-data";
+import { redirect } from "next/navigation";
 
 export interface PostDataFormat {
   id: number;
@@ -215,6 +216,7 @@ export async function deletePost(post_id: number) {
     },
   });
   revalidatePath("/home");
+  redirect("/home");
 }
 
 export async function updatePost(id: number, formData: FormData) {
