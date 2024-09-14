@@ -127,10 +127,13 @@ export async function PostParentCard({ post_id }: { post_id: number }) {
   );
 }
 
-export async function PostStatusCard({ post_id }: { post_id: number }) {
+export async function PostStatusCard({ post_id, addname }: { post_id: number;addname:string }) {
   const post = await fetchPost({
     where: {
       id: Number(post_id),
+      author:{
+        addname: addname,
+      }
     },
   });
 

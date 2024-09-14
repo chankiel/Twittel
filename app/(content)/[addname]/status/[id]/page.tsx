@@ -11,11 +11,11 @@ export default function Post({
   params: { id: string; addname: string };
 }) {
   const post_id = Number(params.id);
-  const fetchReplies = fetchPosts.bind(null,{
+  const fetchReplies = fetchPosts.bind(null, {
     where: {
       parent_id: Number(params.id),
     },
-  })
+  });
   return (
     <div>
       <div className="flex items-center px-3 gap-7 py-4">
@@ -26,16 +26,23 @@ export default function Post({
           <h1 className="text-2xl font-bold">Post</h1>{" "}
         </div>
       </div>
-      <PostStatusCard post_id={post_id}/>
-      <Suspense fallback={<PostCardSkeletons uploadAble={true} placeholder={"Post your reply"}/>}>
-      <PostCards
-        uploadAble={true}
-        placeholder="Post your reply"
-        emptyHeading="There's no reply at the moment"
-        emptyPar="Be the first to reply!"
-        fetchFunction={fetchReplies}
-        parent_id={post_id}
-      />
+      <PostStatusCard post_id={post_id} addname={params.addname} />
+      <Suspense
+        fallback={
+          <PostCardSkeletons
+            uploadAble={true}
+            placeholder={"Post your reply"}
+          />
+        }
+      >
+        <PostCards
+          uploadAble={true}
+          placeholder="Post your reply"
+          emptyHeading="There's no reply at the moment"
+          emptyPar="Be the first to reply!"
+          fetchFunction={fetchReplies}
+          parent_id={post_id}
+        />
       </Suspense>
     </div>
   );

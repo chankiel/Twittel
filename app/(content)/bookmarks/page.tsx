@@ -5,7 +5,7 @@ import { fetchPostsBookmarked } from "@/lib/actions";
 import { userId } from "@/lib/placeholder-data";
 import { Suspense } from "react";
 export default async function Bookmarks() {
-  const fetchBookmarkWithId = fetchPostsBookmarked.bind(null,userId);
+  const fetchBookmarkWithId = fetchPostsBookmarked.bind(null, userId);
 
   return (
     <>
@@ -14,13 +14,13 @@ export default async function Bookmarks() {
         <p>@hehehe</p>
       </div>
       <Search placeholder="Search" className="ml-3"></Search>
-      <Suspense fallback={<PostCardSkeletons/>}>
-      <PostCards
-        uploadAble={false}
-        emptyHeading="Save post for later"
-        emptyPar="Bookmark posts so you can find them easily later"
-        fetchFunction={fetchBookmarkWithId}
-      />
+      <Suspense fallback={<PostCardSkeletons />}>
+        <PostCards
+          uploadAble={false}
+          emptyHeading="Save post for later"
+          emptyPar="Bookmark posts so you can find them easily later"
+          fetchFunction={fetchBookmarkWithId}
+        />
       </Suspense>
     </>
   );
