@@ -11,31 +11,37 @@ import Image from "next/image";
 import PostAction from "./post-action";
 import { ReplyForm } from "./reply-form";
 import { PostDataFormat } from "@/lib/actions";
-
+import {auth} from "@/auth"
+import { notFound } from "next/navigation";
 interface PostFooterProps {
   post: PostDataFormat;
   isStatus?: boolean;
   isParentStatus?: boolean;
 }
 
-export default function PostFooter({
+export default async function PostFooter({
   post,
   isStatus = false,
   isParentStatus = false,
 }: PostFooterProps) {
+  const session = await auth();
+  if(!session?.user){
+    notFound();
+  }
+  const userId = session.user.id;
   const liked = post.likedBy.length > 0;
   const bookmarked = post.bookmarkedBy.length > 0;
   return (
     // flex h-6 mt-4
-    <div className={`flex h-6 ${isParentStatus ? "mb-3 mt-1":"mt-4"}`}>
+    <div className={`flex h-6 mt-2 ${isParentStatus && "mb-5"}`}>
       <div className="flex-grow flex items-center gap-[4px]">
-        <PostAction type="reply" post_id={post.id} user_id={1}>
+        <PostAction type="reply" post_id={post.id} user_id={userId}>
           <ReplyForm parent_post={post} />
         </PostAction>
         <p>{post._count.replies}</p>
       </div>
       <div className="flex-grow flex items-center gap-[2px]">
-        <PostAction type="like" post_id={post.id} user_id={1}>
+        <PostAction type="like" post_id={post.id} user_id={userId}>
           {liked ? (
             <HeartSolidIcon className="max-h-full text-red-500" />
           ) : (
@@ -52,7 +58,7 @@ export default function PostFooter({
       {isStatus ? (
         <>
           <div className="flex-grow h-full flex items-center gap-[2px]">
-            <PostAction type="bookmark" post_id={post.id} user_id={1}>
+            <PostAction type="bookmark" post_id={post.id} user_id={userId}>
               {bookmarked ? (
                 <BookmarkSolidIcon className="max-h-full text-blue-600" />
               ) : (
@@ -67,7 +73,7 @@ export default function PostFooter({
         </>
       ) : (
         <div className="h-full flex items-center justify-end gap-1">
-          <PostAction type="bookmark" post_id={post.id} user_id={1}>
+          <PostAction type="bookmark" post_id={post.id} user_id={userId}>
             {bookmarked ? (
               <BookmarkSolidIcon className="h-full text-blue-600" />
             ) : (

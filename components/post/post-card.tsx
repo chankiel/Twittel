@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PostOptions } from "./post-option";
 import { fetchPost, type PostDataFormat } from "@/lib/actions";
 import Link from "next/link";
@@ -8,6 +7,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PostInput } from "./post-input";
+import UserAvatar from "../parts/user-avatar";
 
 export function PostCardSkeleton() {
   return (
@@ -22,7 +22,13 @@ export function PostCardSkeleton() {
   );
 }
 
-export function PostCardSkeletons({uploadAble=false, placeholder="What's happening!?"}:{uploadAble?:boolean;placeholder?:string}) {
+export function PostCardSkeletons({
+  uploadAble = false,
+  placeholder = "What's happening!?",
+}: {
+  uploadAble?: boolean;
+  placeholder?: string;
+}) {
   return (
     <>
       {uploadAble && <PostInput placeholder={placeholder} />}
@@ -60,11 +66,8 @@ export async function PostCard({
       )}
       <div className={`flex px-3 relative`}>
         <PostOptions className="absolute right-4" post_id={post.id} />
-        <div className="flex flex-col items-center">
-          <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+        <Link href={`/${post.author.addname}`} className="flex flex-col items-center">
+          <UserAvatar src={post.author.image}/>
           {isParentPost && (
             <Image
               src={"/vert-line.png"}
@@ -74,21 +77,23 @@ export async function PostCard({
               className="h-full"
             />
           )}
-        </div>
+        </Link>
         <div className="ml-3 w-full">
-          <Link href={`/${post.author.addname}/status/${post.id}`}>
+          <Link href={`/${post.author.addname}`}>
             <h3 className="font-bold text-lg leading-none">
               {post.author.username}{" "}
               <span>
                 @{post.author.addname} · {diffTimeString}
               </span>
             </h3>
+          </Link>
             {parentPost_author && (
               <h4 className="text-slate-500">
                 Membalas{" "}
-                <span className="text-blue-400">@{parentPost_author}</span>
+                <Link href={`/${parentPost_author}`} className="text-blue-400">@{parentPost_author}</Link>
               </h4>
             )}
+          <Link href={`/${post.author.addname}/status/${post.id}`}>
             <p className="mt-1">{post.content}</p>
           </Link>
           {/* <Image
@@ -127,13 +132,19 @@ export async function PostParentCard({ post_id }: { post_id: number }) {
   );
 }
 
-export async function PostStatusCard({ post_id, addname }: { post_id: number;addname:string }) {
+export async function PostStatusCard({
+  post_id,
+  addname,
+}: {
+  post_id: number;
+  addname: string;
+}) {
   const post = await fetchPost({
     where: {
       id: Number(post_id),
-      author:{
+      author: {
         addname: addname,
-      }
+      },
     },
   });
 
@@ -146,10 +157,7 @@ export async function PostStatusCard({ post_id, addname }: { post_id: number;add
       {post.parent_id && <PostParentCard post_id={post.parent_id} />}
       <div className="flex px-3 relative">
         <PostOptions className="absolute right-4" post_id={post.id} />
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <UserAvatar src={post.author.image}></UserAvatar>
         <div className="ml-3 w-full">
           <h3 className="font-bold text-lg leading-none">
             {post.author.username}
@@ -159,20 +167,11 @@ export async function PostStatusCard({ post_id, addname }: { post_id: number;add
       </div>
       <div className="px-4">
         <p className=" my-2 font-medium">{post.content}</p>
-        {/* <div className="flex justify-center">
-          <Image
-            src={"/imagepost-1.png"}
-            width={300}
-            height={300}
-            alt="image-post"
-            className="w-[90%]"
-          />
-        </div> */}
         <p className="my-3">
           {stringDate}. <span className="font-bold">1,8M</span> Views
         </p>
         <hr />
-        <PostFooter post={post} isStatus={true}></PostFooter>
+        <PostFooter post={post ?? {}} isStatus={true}></PostFooter>
         <hr className="mt-4" />
       </div>
     </>
