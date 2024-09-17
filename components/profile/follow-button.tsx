@@ -1,6 +1,7 @@
 import { toggleFollow } from "@/lib/actions/crud-user";
 import { Button } from "../ui/button";
 import EditProfileForm from "./edit-profile-form";
+import UnfollConfirmation from "./unfollow-confirmation";
 
 export default function FollowButton({
   userId,
@@ -28,27 +29,24 @@ export default function FollowButton({
     addname
   );
   return (
-    <>
+    <div className="flex justify-end">
       {userId === profileUser.id ? (
-        <div className="flex justify-end">
-
-          <EditProfileForm profileUser={{ ...profileUser, addname: addname}}/>
-        </div>
+          <EditProfileForm profileUser={{ ...profileUser, addname: addname }} />
       ) : (
-        <form className="flex justify-end" action={toggleFollowWithIds}>
-          <Button
-            className={`text-lg rounded-full font-extrabold border-2 border-foreground ${
-              isFollowed &&
-              "bg-background text-foreground hover:bg-red-500 hover:text-red-500 hover:bg-opacity-10 hover:border-red-600"
-            }`}
-          >
-            {isFollowed ? <div className="group">
-              <p className="group-hover:hidden">Followed</p>
-              <p className="hidden group-hover:block">Unfollow</p>
-            </div> : "Follow"}
-          </Button>
-        </form>
+        <>
+          {isFollowed ? (
+            <UnfollConfirmation unfollowAction={toggleFollowWithIds} addname={addname}/>
+          ) : (
+            <form action={toggleFollowWithIds}>
+              <Button
+                className={`text-lg rounded-full font-extrabold border-2 border-foreground `}
+              >
+                Follow
+              </Button>
+            </form>
+          )}
+        </>
       )}
-    </>
+    </div>
   );
 }
