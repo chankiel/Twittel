@@ -6,8 +6,8 @@ import {
 import { PostInput } from "./post-input";
 import { ChatBubbleLeftIcon } from "@heroicons/react/24/outline";
 import { PostDataFormat } from "@/lib/actions";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { diffNow } from "@/lib/utils";
+import UserAvatar from "../parts/user-avatar";
 
 interface ReplyFormProps {
   parent_post: PostDataFormat;
@@ -22,10 +22,7 @@ export function ReplyForm({ parent_post }: ReplyFormProps) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <div className="flex p-3 relative border-b">
-          <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+          <UserAvatar src={parent_post.author.image}/>
           <div className="ml-3 w-full">
             <h3 className="font-bold text-lg">
               {parent_post.author.username}{" "}
