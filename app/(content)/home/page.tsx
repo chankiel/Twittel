@@ -1,13 +1,21 @@
 import { TabsAll } from "@/components/post/post-tabs";
 import { PostCards } from "@/components/post/post-cards";
 import { fetchPosts, fetchPostsFollowed } from "@/lib/actions";
-import { userId } from "@/lib/placeholder-data";
 import { Suspense } from "react";
 import { PostCardSkeletons } from "@/components/post/post-card";
+import { auth } from "@/auth";
+import { notFound } from "next/navigation";
 
-export default function Home() {
-  const fetchPostFollowedId = fetchPostsFollowed.bind(null, userId);
-
+export default async function Home() {
+  const session = await auth();  
+  if(!session?.user){
+    notFound();
+  }
+  const fetchPostFollowedId = fetchPostsFollowed.bind(null, session.user.id);
+  const fetchPostWithLBStatus = fetchPosts.bind(null,{selectLikeAndBookmarkFields: {
+    where: { id: session.user.id },
+    select: { id: true },
+  }})
   return (
     <>
       <TabsAll
@@ -16,7 +24,7 @@ export default function Home() {
             trigger: "Untuk Anda",
             content: (
               <Suspense fallback={<PostCardSkeletons uploadAble={true} />}>
-                <PostCards uploadAble={true} fetchFunction={fetchPosts} />
+                <PostCards uploadAble={true} fetchFunction={fetchPostWithLBStatus} />
               </Suspense>
             ),
             value: "first",
@@ -28,6 +36,8 @@ export default function Home() {
                 <PostCards
                   uploadAble={true}
                   fetchFunction={fetchPostFollowedId}
+                  emptyHeading="No Posts by your following currently.."
+                  emptyPar="Follow more people to know what they're up to!"
                 />
               </Suspense>
             ),
