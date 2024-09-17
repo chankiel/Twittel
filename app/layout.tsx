@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 // import localFont from "next/font/local";
 import "./globals.css";
 import { openSans } from "./fonts/font";
+import Providers from "./providers";
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -26,10 +27,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${openSans.className} antialiased`}
-      >
-        {children}
+      <body className={`${openSans.className} antialiased`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
