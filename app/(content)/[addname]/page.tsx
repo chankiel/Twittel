@@ -1,51 +1,81 @@
 import { PostCards } from "@/components/post/post-cards";
-import { Button } from "@/components/ui/button";
 import { TabsAll } from "@/components/post/post-tabs";
-import { ArrowLeftIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftIcon, CalendarDaysIcon, MapPinIcon, LinkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import {
   fetchPostsLiked,
   fetchPostsOwned,
   fetchRepliesOwned,
+  fetchUserWithAddname,
 } from "@/lib/actions";
-import { userId } from "@/lib/placeholder-data";
 import { Suspense } from "react";
 import { PostCardSkeletons } from "@/components/post/post-card";
+import { notFound } from "next/navigation";
+import { formatDateProfile } from "@/lib/utils";
+import UserAvatar from "@/components/parts/user-avatar";
+import { auth } from "@/auth";
+import FollowButton from "@/components/profile/follow-button";
+import paths from "@/path";
 
-export default function Profile() {
-  const fetchUserPostId = fetchPostsOwned.bind(null, userId);
-  const fetchPostLikedId = fetchPostsLiked.bind(null, userId);
-  const fetchRepliesId = fetchRepliesOwned.bind(null, userId);
+export default async function Profile({
+  params,
+}: {
+  params: { addname: string };
+}) {
+  const session = await auth();
+  const userId = session?.user?.id || "";
+
+  const user = await fetchUserWithAddname(userId,params.addname);
+  if (!user) {
+    notFound();
+  }
+
+  const isFollowed = user.followedBy.length>0;
+  const fetchUserPostId = fetchPostsOwned.bind(null, userId,params.addname);
+  const fetchPostLikedId = fetchPostsLiked.bind(null,userId,params.addname);
+  const fetchRepliesId = fetchRepliesOwned.bind(null,userId, params.addname);
+
   return (
     <>
       <div className="flex items-center px-3 gap-7 py-1">
-        <Link href={"/home"} className="h-6">
+        <Link href={paths.home()} className="h-6">
           <ArrowLeftIcon className="h-full" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold leading-none">UserTwitter</h1>
-          <p>0 posts</p>
+          <h1 className="text-2xl font-bold leading-none">{user.username}</h1>
+          <p>{user._count.posts} posts</p>
         </div>
       </div>
       <div className="h-[250px] bg-gray-600 relative">
-        <div className="absolute h-[150px] w-[150px] rounded-full bg-blue-800 -bottom-1/4 left-3 border-4 border-white"></div>
+        <UserAvatar className="absolute h-[150px] w-[150px] -bottom-1/4 left-3 border-4 border-white"
+        src={user.image}/>
       </div>
       <div className="p-3">
-        <div className="flex justify-end">
-          <Button className="rounded-full font-bold">Edit Profile</Button>
-        </div>
-        <h1 className="text-2xl font-bold leading-none mt-8">UserTwitter</h1>
-        <p>@hehehe</p>
-        <div className="flex items-center my-3">
-          <CalendarDaysIcon className="h-8" />
-          <p>Joined July 2024</p>
+        <FollowButton addname={params.addname} isFollowed={isFollowed} userId={userId} profileUser={user} />
+        <h1 className="text-2xl font-bold leading-none mt-8">{user.username}</h1>
+        <p>@{params.addname}</p>
+        <div className="flex items-center my-3 gap-4">
+          {user.location && <div className="flex items-center gap-1">
+            <MapPinIcon className="h-6" />
+            <p>{user.location}</p>
+          </div>}
+          {user.website && <Link href={`https://${user.website}`} className="flex items-center gap-1">
+            <LinkIcon className="h-6" />
+            <p className="text-blue-400">{user.website}</p>
+          </Link>}
+          <div className="flex items-center gap-1">
+            <CalendarDaysIcon className="h-6" />
+            <p>{formatDateProfile(user.createdAt)}</p>
+          </div>
         </div>
         <div className="flex items-center gap-4">
           <p>
-            <span className="font-bold text-lg">1</span> Following
+            <span className="font-bold text-lg">{user._count.following}</span>{" "}
+            Following
           </p>
           <p>
-            <span className="font-bold text-lg">0</span> Followers
+            <span className="font-bold text-lg">{user._count.followedBy}</span>{" "}
+            Followers
           </p>
         </div>
       </div>
