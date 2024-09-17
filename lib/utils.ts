@@ -41,3 +41,12 @@ export const formatDate = (date: Date): string => {
 
   return `${formattedTime} · ${formattedDate}`;
 };
+
+export const generateSlug = (name: string) => {
+  return name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g,'');
+}
+
+export const formatDateProfile = (date: Date): string => {
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long' };
+  return `Joined ${date.toLocaleDateString('en-US', options)}`;
+};
