@@ -2,7 +2,7 @@ import {toggleLike, toggleBookmark} from "@/lib/actions"
 
 interface PostActionProps{
     type: string;
-    user_id: number;
+    user_id: string;
     post_id: number;
     children: React.ReactNode;
 }
