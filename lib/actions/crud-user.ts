@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 import { revalidatePath } from "next/cache";
 import prisma from "../db";
@@ -64,32 +64,32 @@ const UserSchema = z.object({
   website: z.string(),
 });
 
-async function checkExistedUsername(username:string){
-    const existedUsername = await prisma.user.count({
-        where:{
-            username: username,
-        }
-      })
-    return existedUsername > 0;
-}
-
-async function checkExistedAddname(addname:string){
-    const existedUsername = await prisma.user.count({
-        where:{
-            addname: addname,
-        }
-      })
-    return existedUsername > 0;
+async function checkExistedUsername(username: string, userId: string) {
+  const user = await prisma.user.findFirst({
+    where: {
+      username,
+      NOT: { id: userId },
+    },
+  });
+  return !!user;
 }
 
 
+async function checkExistedAddname(addname: string, userId: string) {
+  const user = await prisma.user.findFirst({
+    where: {
+      addname,
+      NOT: { id: userId },
+    },
+  });
+  return !!user;
+}
 
 export async function updateUserProfile(
   userId: string,
   prevState: State,
   formData: FormData
 ): Promise<State> {
-  console.log(formData);
   const validatedFields = UserSchema.safeParse({
     username: formData.get("username"),
     addname: formData.get("addname"),
@@ -97,7 +97,7 @@ export async function updateUserProfile(
     location: formData.get("location"),
     website: formData.get("website"),
   });
-
+  
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
@@ -105,41 +105,44 @@ export async function updateUserProfile(
     };
   }
 
-  const { username, addname, bio, location, website } =
-    validatedFields.data;
+  const { username, addname, bio, location, website } = validatedFields.data;
 
-
-  if(await checkExistedUsername(username)){
-    return{
-        errors: {
-            username: ["A user with that username already exists."]
-        }
-    }
+  if (await checkExistedUsername(username,userId)) {
+    return {
+      errors: {
+        username: ["A user with that username already exists."],
+      },
+    };
   }
 
-  if(await checkExistedAddname(addname)){
-    return{
-        errors: {
-            addname: ["A user with that Addname already exists."]
-        }
-    }
+  if (await checkExistedAddname(addname,userId)) {
+    return {
+      errors: {
+        addname: ["A user with that addname already exists."],
+      },
+    };
   }
 
-  await prisma.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      username: username,
-      addname: addname,
-      bio: bio,
-      location: location,
-      website: website,
-    },
-  });
-
-  return{
+  try {
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        username,
+        addname,
+        bio,
+        location,
+        website,
+      },
+    });
+  } catch (error) {
+    console.error("Prisma update error:", error);
+  }
+  
+  revalidatePath(paths.profile(addname));
+  return {
     message: "User updated successfully.",
     errors: {},
-  }
+  };
 }
