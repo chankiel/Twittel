@@ -4,6 +4,7 @@ import { PostCardSkeletons, PostStatusCard } from "@/components/post/post-card";
 import { PostCards } from "@/components/post/post-cards";
 import { fetchPosts } from "@/lib/actions";
 import { Suspense } from "react";
+import paths from "@/path";
 
 export default function Post({
   params,
@@ -19,7 +20,7 @@ export default function Post({
   return (
     <div>
       <div className="flex items-center px-3 gap-7 py-4">
-        <Link href={"/home"} className="h-6">
+        <Link href={paths.home()} className="h-6">
           <ArrowLeftIcon className="h-full" />
         </Link>
         <div>
