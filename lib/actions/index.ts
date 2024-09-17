@@ -1,6 +1,0 @@
-export * from "./auth"
-export * from "./crud-post"
-export * from "./crud-user"
-export * from "./fetch-posts"
-export * from "./fetch-user"
-export * from "./type-data"
