@@ -57,8 +57,8 @@ export type State = {
 };
 
 const UserSchema = z.object({
-  username: z.string(),
-  addname: z.string(),
+  username: z.string().min(1,{message: 'Username can\'t be empty.'}),
+  addname: z.string().min(1,{message: "Addname can\'t be empty."}),
   bio: z.string(),
   location: z.string(),
   website: z.string(),
