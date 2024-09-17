@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import Search from "@/components/parts/search-input";
 import { PostCardSkeletons } from "@/components/post/post-card";
 import { PostCards } from "@/components/post/post-cards";
-import { fetchPostsBookmarked } from "@/lib/actions";
+import { fetchPostsBookmarked } from "@/lib/actions/fetch-posts";
 import { Suspense } from "react";
 
 export default async function Bookmarks() {

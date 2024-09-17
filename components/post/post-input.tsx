@@ -1,7 +1,7 @@
 "use client";
 
 import { Textarea } from "../ui/textarea";
-import { createPost } from "@/lib/actions";
+import { createPost } from "@/lib/actions/crud-post";
 import { useState } from "react";
 import { GifIcon, PhotoIcon } from "@heroicons/react/24/outline";
 import { Button } from "../ui/button";

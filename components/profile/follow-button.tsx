@@ -1,4 +1,4 @@
-import { toggleFollow } from "@/lib/actions";
+import { toggleFollow } from "@/lib/actions/crud-user";
 import { Button } from "../ui/button";
 import EditProfileForm from "./edit-profile-form";
 

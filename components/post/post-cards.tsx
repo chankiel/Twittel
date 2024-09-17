@@ -1,6 +1,6 @@
 import { PostCard } from "./post-card";
 import { PostInput } from "./post-input";
-import { type PostDataFormat } from "@/lib/actions";
+import { type PostDataFormat } from "@/lib/actions/type-data";
 
 interface PostCardsProps {
   uploadAble: boolean;

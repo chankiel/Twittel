@@ -5,7 +5,7 @@ import {
 } from "@/components/ui/dialog";
 import { PostInput } from "./post-input";
 import { ChatBubbleLeftIcon } from "@heroicons/react/24/outline";
-import { PostDataFormat } from "@/lib/actions";
+import { PostDataFormat } from "@/lib/actions/type-data";
 import { diffNow } from "@/lib/utils";
 import UserAvatar from "../parts/user-avatar";
 

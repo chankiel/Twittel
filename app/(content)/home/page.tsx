@@ -1,6 +1,6 @@
 import { TabsAll } from "@/components/post/post-tabs";
 import { PostCards } from "@/components/post/post-cards";
-import { fetchPosts, fetchPostsFollowed } from "@/lib/actions";
+import { fetchPosts, fetchPostsFollowed } from "@/lib/actions/fetch-posts";
 import { Suspense } from "react";
 import { PostCardSkeletons } from "@/components/post/post-card";
 import { auth } from "@/auth";

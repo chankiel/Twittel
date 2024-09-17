@@ -1,4 +1,4 @@
-import {toggleLike, toggleBookmark} from "@/lib/actions"
+import {toggleLike, toggleBookmark} from "@/lib/actions/crud-post"
 
 interface PostActionProps{
     type: string;

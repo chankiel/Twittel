@@ -2,7 +2,7 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { PostCardSkeletons, PostStatusCard } from "@/components/post/post-card";
 import { PostCards } from "@/components/post/post-cards";
-import { fetchPosts } from "@/lib/actions";
+import { fetchPosts } from "@/lib/actions/fetch-posts";
 import { Suspense } from "react";
 import paths from "@/path";
 

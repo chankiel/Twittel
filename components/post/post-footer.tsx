@@ -10,7 +10,7 @@ import {
 import Image from "next/image";
 import PostAction from "./post-action";
 import { ReplyForm } from "./reply-form";
-import { PostDataFormat } from "@/lib/actions";
+import { PostDataFormat } from "@/lib/actions/type-data";
 import {auth} from "@/auth"
 import { notFound } from "next/navigation";
 interface PostFooterProps {

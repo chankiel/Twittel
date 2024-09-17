@@ -13,7 +13,7 @@ import {
   NoSymbolIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
-import { deletePost } from "@/lib/actions";
+import { deletePost } from "@/lib/actions/crud-post";
 
 export function PostOptions({
   className,

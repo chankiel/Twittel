@@ -1,5 +1,5 @@
 import { TwitterLogoIcon } from "@radix-ui/react-icons";
-import { signIn } from "@/lib/actions";
+import { signIn } from "@/lib/actions/auth";
 
 import { Button } from "../ui/button";
 

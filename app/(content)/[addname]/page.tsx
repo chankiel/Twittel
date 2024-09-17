@@ -6,8 +6,8 @@ import {
   fetchPostsLiked,
   fetchPostsOwned,
   fetchRepliesOwned,
-  fetchUserWithAddname,
-} from "@/lib/actions";
+} from "@/lib/actions/fetch-posts";
+import {  fetchUserWithAddname } from "@/lib/actions/fetch-user"
 import { Suspense } from "react";
 import { PostCardSkeletons } from "@/components/post/post-card";
 import { notFound } from "next/navigation";

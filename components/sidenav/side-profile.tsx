@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import Image from "next/image";
-import { signOut } from "@/lib/actions";
+import { signOut } from "@/lib/actions/auth";
 
 export default function SideProfile() {
   const { data: session } = useSession();

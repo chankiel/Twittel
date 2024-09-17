@@ -1,5 +1,6 @@
 import { PostOptions } from "./post-option";
-import { fetchPost, type PostDataFormat } from "@/lib/actions";
+import { fetchPost} from "@/lib/actions/fetch-posts";
+import { type PostDataFormat } from "@/lib/actions/type-data"
 import Link from "next/link";
 import PostFooter from "./post-footer";
 import { diffNow, formatDate } from "@/lib/utils";
