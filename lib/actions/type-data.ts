@@ -26,6 +26,26 @@ export interface PostDataFormat {
   parent_id: number | null;
 }
 
+export interface UserDataFormat {
+  id: string;
+  _count: {
+    posts: number;
+    followedBy: number;
+    following: number;
+  };
+  username: string | null;
+  addname: string | null;
+  image: string | null;
+  bio: string | null;
+  location: string | null;
+  website: string | null;
+  birthdate: Date | null;
+  createdAt: Date;
+  followedBy: {
+    id: string;
+  }[];
+}
+
 export interface FetchPostsOptions {
   where?: object;
   orderBy?: object;
