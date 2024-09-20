@@ -101,7 +101,6 @@ export async function updateUserProfile(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create Invoice.",
     };
   }
 
@@ -140,9 +139,8 @@ export async function updateUserProfile(
     console.error("Prisma update error:", error);
   }
   
-  revalidatePath(paths.profile(addname));
   return {
-    message: "User updated successfully.",
+    message: addname,
     errors: {},
   };
 }
