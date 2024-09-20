@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from "../db";
+import { FetchPostsOptions } from "./type-data";
 
 const selectQuery = {
   _count: {
@@ -12,6 +13,7 @@ const selectQuery = {
   },
   id: true,
   username: true,
+  addname: true,
   bio: true,
   location: true,
   website: true,
@@ -19,6 +21,27 @@ const selectQuery = {
   image: true,
   createdAt: true,
 };
+
+export async function fetchUsers(userId: string, options: FetchPostsOptions = {}){
+    const { where, orderBy } = options;
+  const users = await prisma.user.findMany({
+    where: where || {
+    },
+    orderBy: orderBy || { createdAt: "desc" },
+    select: {
+      ...selectQuery,
+      followedBy: {
+        where: {
+          id: userId,
+        },
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+  return users;
+}
 
 export async function fetchUserWithAddname(userId: string, addname: string) {
   const user = await prisma.user.findFirst({
