@@ -17,6 +17,9 @@ import React, { useState } from "react";
 import { useFormState } from "react-dom";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
+import paths from "@/path";
+
 
 export function InputForm({
   defaultValue,
@@ -96,7 +99,15 @@ export default function EditProfileForm({
   const updateUserWithId = updateUserProfile.bind(null, profileUser.id);
   const [state, formAction] = useFormState(updateUserWithId, initialState);
   const [submitable, setSubmitable] = useState(true);
-  console.log(submitable);
+  const {replace} = useRouter();
+
+  const handleSubmit = (e:React.FormEvent<HTMLFormElement>)=>{
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form); // Create FormData to easily access form fields
+    const newAddname = formData.get('addname')?.toString() || ""; 
+    replace(paths.profile(newAddname));
+  }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -105,7 +116,7 @@ export default function EditProfileForm({
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
-        <form action={formAction} className="relative">
+        <form action={formAction} onSubmit={handleSubmit} className="relative">
           <DialogHeader className="mb-5 flex items-center">
             <DialogPrimitive.Close className="rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-neutral-950 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-neutral-100 data-[state=open]:text-neutral-500 dark:ring-offset-neutral-950 dark:focus:ring-neutral-300 dark:data-[state=open]:bg-neutral-800 dark:data-[state=open]:text-neutral-400">
               <Cross2Icon className="h-6 w-6" />
