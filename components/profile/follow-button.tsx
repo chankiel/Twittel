@@ -2,36 +2,30 @@ import { toggleFollow } from "@/lib/actions/crud-user";
 import { Button } from "../ui/button";
 import EditProfileForm from "./edit-profile-form";
 import UnfollConfirmation from "./unfollow-confirmation";
+import { UserDataFormat } from "@/lib/actions/type-data";
+import { cn } from "@/lib/utils";
 
 export default function FollowButton({
   userId,
   profileUser,
-  isFollowed,
-  addname,
+  className,
 }: {
   userId: string;
-  profileUser: {
-    id: string;
-    image: string | null;
-    username: string | null;
-    bio: string | null;
-    location: string | null;
-    website: string | null;
-    birthdate: Date | null;
-  };
-  isFollowed: boolean;
-  addname: string;
+  profileUser: UserDataFormat;
+  className?: string;
 }) {
+  const addname = profileUser.addname ?? "";
   const toggleFollowWithIds = toggleFollow.bind(
     null,
     userId,
     profileUser.id,
-    addname
+    addname,
   );
+  const isFollowed = profileUser.followedBy.length>0;
   return (
-    <div className="flex justify-end">
+    <div className={cn(className)}>
       {userId === profileUser.id ? (
-          <EditProfileForm profileUser={{ ...profileUser, addname: addname }} />
+          <EditProfileForm profileUser={profileUser} />
       ) : (
         <>
           {isFollowed ? (

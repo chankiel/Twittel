@@ -59,7 +59,7 @@ const links = [
 
 export function SideNav() {
   return (
-    <div className="flex md:flex-col px-3 md:h-screen lg:w-[250px] items-end lg:items-start sm:sticky sm:top-0 fixed bottom-0 z-20 sm:bottom-auto justify-around bg-white sm:bg-background">
+    <div className="flex md:flex-col px-3 md:h-screen w-full md:w-auto lg:w-[250px] items-end lg:items-start sm:sticky sm:top-0 fixed bottom-0 z-20 sm:bottom-auto justify-around bg-white sm:bg-background">
       {links.map((link) => {
         return (
             <SideIcon

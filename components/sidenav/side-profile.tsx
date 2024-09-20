@@ -36,13 +36,12 @@ export default function SideProfile() {
     fetchUser();
   }, [session?.user]);
 
-  console.log(user.image);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="w-full items-center justify-center mt-auto mb-5 gap-2 hidden md:flex rounded-full hover:bg-gray-200 px-2">
         <UserAvatar fallback="CN" src={user.image}></UserAvatar>
-        <div className="hidden lg:block">
+        <div className="hidden lg:block text-start">
           <h1 className="font-bold">{user.username}</h1>
           <h2>@{user.addname}</h2>
         </div>

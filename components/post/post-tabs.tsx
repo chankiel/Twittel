@@ -14,7 +14,7 @@ interface Tab {
   export const TabsAll = ({ tabs, defaultValue }: TabsProps) => {
     return (
       <Tabs defaultValue={defaultValue || tabs[0].value} className="w-full">
-        <TabsList className="w-full h-[50px]">
+        <TabsList className="w-full h-[50px] sticky top-0 z-50 bg-opacity-75">
           {tabs.map((tab) => (
             <TabsTrigger
               key={tab.value}

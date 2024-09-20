@@ -17,7 +17,7 @@ export default function UnfollConfirmation({unfollowAction,
   return (
     <AlertDialog>
       <AlertDialogTrigger
-        className={`group text-lg rounded-full font-extrabold border-2 border-foreground px-4 py-1
+        className={`group h-10 text-lg rounded-full font-extrabold border-2 border-foreground px-4 py-1
               bg-background text-foreground hover:bg-red-500 hover:text-red-500 hover:bg-opacity-10 hover:border-red-600`}
       >
         <p className="group-hover:hidden">Followed</p>
