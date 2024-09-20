@@ -3,7 +3,7 @@ import { PostInput } from "./post-input";
 import { type PostDataFormat } from "@/lib/actions/type-data";
 
 interface PostCardsProps {
-  uploadAble: boolean;
+  uploadAble?: boolean;
   placeholder?: string;
   fetchFunction: () => Promise<
     PostDataFormat[]
@@ -15,7 +15,7 @@ interface PostCardsProps {
 }
 
 export async function PostCards({
-  uploadAble,
+  uploadAble = false,
   placeholder = "What's happening?!",
   fetchFunction,
   emptyHeading = "No Posts",
