@@ -1,24 +1,23 @@
 'use client';
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { useSearchParams, usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { FormEventHandler, useState } from 'react';
 import { cn } from '@/lib/utils';
 
-export default function Search({ placeholder, className }: { placeholder: string, className?:string }) {
+export default function Search({ placeholder, className, defaultValue="" }: { placeholder: string, className?:string;defaultValue?:string }) {
   const searchParams = useSearchParams();
-  const pathname = usePathname();
   const {replace} = useRouter();
-  const [inputVal,setInputVal] = useState("");
-
-  const handleSearch = () => {   
+  const [inputVal,setInputVal] = useState(defaultValue);
+  const handleSearch: FormEventHandler<HTMLFormElement> = (e) => {   
+    e.preventDefault();
     const params = new URLSearchParams(searchParams);
     if (inputVal) {
-      params.set('query', inputVal);
+      params.set('search', inputVal);
     } else {
-      params.delete('query');
+      params.delete('search');
     }
-    replace(`${pathname}?${params.toString()}`);
+    replace(`/search?${params.toString()}`);
   };
 
   return (
