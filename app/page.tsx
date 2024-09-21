@@ -12,6 +12,7 @@ export default function Home() {
 
   useEffect(() => {
     if (session) {
+      router.prefetch("/home");
       const timer = setTimeout(() => {
         router.push("/home");
       }, 1000);
