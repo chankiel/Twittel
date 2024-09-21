@@ -97,6 +97,7 @@ export async function updateUserProfile(
     location: formData.get("location"),
     website: formData.get("website"),
   });
+  console.log(validatedFields);
   
   if (!validatedFields.success) {
     return {
@@ -138,7 +139,7 @@ export async function updateUserProfile(
   } catch (error) {
     console.error("Prisma update error:", error);
   }
-  
+  revalidatePath(paths.profile(addname));
   return {
     message: addname,
     errors: {},
