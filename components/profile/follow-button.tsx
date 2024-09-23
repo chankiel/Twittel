@@ -1,6 +1,6 @@
-import { toggleFollow } from "@/lib/actions/crud-user";
+import { toggleFollow, updateUserProfile } from "@/lib/actions/crud-user";
 import { Button } from "../ui/button";
-import EditProfileForm from "./edit-profile-form";
+import ProfileForm from "./profile-form";
 import UnfollConfirmation from "./unfollow-confirmation";
 import { UserDataFormat } from "@/lib/actions/type-data";
 import { cn } from "@/lib/utils";
@@ -22,10 +22,12 @@ export default function FollowButton({
     addname,
   );
   const isFollowed = profileUser.followedBy.length>0;
+  const updateUserWithId = updateUserProfile.bind(null, profileUser.id);
   return (
     <div className={cn(className)}>
       {userId === profileUser.id ? (
-          <EditProfileForm profileUser={profileUser} />
+        
+          <ProfileForm profileUser={profileUser} crudUser={updateUserWithId} isRegister={false}/>
       ) : (
         <>
           {isFollowed ? (
