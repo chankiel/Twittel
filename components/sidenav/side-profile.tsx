@@ -11,10 +11,12 @@ import {
 } from "../ui/dropdown-menu";
 import Image from "next/image";
 import { signOut } from "@/lib/actions/auth";
+import { useRouter } from "next/navigation";
 
 export default function SideProfile() {
   const { data: session } = useSession();
   const [user, setUser] = useState({ username: "", addname: "", image: "" });
+  const { replace } = useRouter();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -36,7 +38,6 @@ export default function SideProfile() {
     fetchUser();
   }, [session?.user]);
 
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="w-full items-center justify-center mt-auto mb-5 gap-2 hidden md:flex rounded-full hover:bg-gray-200 px-2">
@@ -55,7 +56,15 @@ export default function SideProfile() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="rounded-2xl">
         <DropdownMenuItem>
-          <form action={signOut}>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              await signOut();
+              setTimeout(() => {
+                replace("/");
+              }, 500);
+            }}
+          >
             <button className="font-bold my-2" type="submit">
               Keluar dari @{user.addname}?
             </button>
