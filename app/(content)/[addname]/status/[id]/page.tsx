@@ -1,11 +1,8 @@
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import { PostCardSkeletons, PostStatusCard } from "@/components/post/post-card";
 import { PostCards } from "@/components/post/post-cards";
 import { fetchPosts } from "@/lib/actions/fetch-posts";
 import { Suspense } from "react";
-import paths from "@/path";
-
+import ContentHeader from "@/components/parts/content-header";
 export default function Post({
   params,
 }: {
@@ -19,14 +16,9 @@ export default function Post({
   });
   return (
     <div>
-      <div className="flex items-center px-3 gap-7 py-4">
-        <Link href={paths.home()} className="h-6">
-          <ArrowLeftIcon className="h-full" />
-        </Link>
-        <div>
-          <h1 className="text-2xl font-bold">Post</h1>{" "}
-        </div>
-      </div>
+      <ContentHeader className="py-4">
+        <h1 className="text-2xl font-bold">Post</h1>{" "}
+      </ContentHeader>
       <PostStatusCard post_id={post_id} addname={params.addname} />
       <Suspense
         fallback={
