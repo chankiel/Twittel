@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -9,9 +9,8 @@ import { useSession } from "next-auth/react";
 export default function Home() {
   const router = useRouter();
   const { data: session, status } = useSession();
-
   useEffect(() => {
-    if (session) {
+    if (status==="authenticated") {
       router.prefetch("/home");
       const timer = setTimeout(() => {
         router.push("/home");
@@ -19,13 +18,9 @@ export default function Home() {
 
       return () => clearTimeout(timer);
     }
-  }, [session, router]);
+  }, [status, router]);
 
-  if (status === "loading") {
-    return <Loading />;
-  }
-
-  if (!session) {
+  if (status !== "loading" && !session) {
     return <LoginPage />;
   }
 
