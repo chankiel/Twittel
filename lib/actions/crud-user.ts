@@ -122,9 +122,9 @@ export async function createUserProfile(
   const validatedFields = UserSchema.safeParse({
     username: formData.get("username"),
     addname: formData.get("addname"),
-    bio: formData.get("bio"),
-    location: formData.get("location"),
-    website: formData.get("website"),
+    // bio: formData.get("bio"),
+    // location: formData.get("location"),
+    // website: formData.get("website"),
     password: formData.get('password'),
     email: formData.get('email'),
   });
@@ -135,7 +135,7 @@ export async function createUserProfile(
     };
   }
 
-  const { username, addname, bio, location, website, password, email } = validatedFields.data;
+  const { username, addname, password, email } = validatedFields.data;
   if (await checkExistedAddname(addname,"")) {
     return {
       errors: {
@@ -157,9 +157,6 @@ export async function createUserProfile(
       data: {
         username,
         addname,
-        bio,
-        location,
-        website,
         hashedPassword,
         email,
       },
