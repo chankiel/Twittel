@@ -37,7 +37,7 @@ export async function FollowCards({ fetchOptions, authId }: FollowCardsProps) {
   const fetchMatchingUsers = fetchUsers.bind(null, authId, fetchOptions);
   const users = await fetchMatchingUsers();
   return (
-    <div className="px-3">
+    <div className="px-3 min-h-screen">
       {users.length === 0 && (
         <div className="flex mt-10">
           <div className="mx-auto w-1/2">
