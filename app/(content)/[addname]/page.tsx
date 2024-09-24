@@ -21,6 +21,7 @@ import { auth } from "@/auth";
 import FollowButton from "@/components/profile/follow-button";
 import Image from "next/image";
 import ContentHeader from "@/components/parts/content-header";
+import UnauthLogin from "@/components/login/unauth-login";
 
 export default async function Profile({
   params,
@@ -41,6 +42,7 @@ export default async function Profile({
 
   return (
     <>
+    {userId==="" && <UnauthLogin/>}
       <ContentHeader>
         <h1 className="text-2xl font-bold leading-none">{user.username}</h1>
         <p>{user._count.posts} posts</p>
@@ -68,6 +70,7 @@ export default async function Profile({
           {user.username}
         </h1>
         <p>@{params.addname}</p>
+        <p className="my-3">{user.bio}</p>
         <div className="flex items-center my-3 gap-4">
           {user.location && (
             <div className="flex items-center gap-1">
