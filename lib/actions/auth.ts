@@ -1,12 +1,14 @@
 "use server";
 
 import * as auth from "@/auth";
+import { revalidatePath } from "next/cache";
 
 export async function signInGithub() {
   return auth.signIn("github");
 }
 
 export async function signOut() {
+  revalidatePath("/");
   return auth.signOut();
 }
 
