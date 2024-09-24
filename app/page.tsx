@@ -1,28 +1,11 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { Loading } from "@/components/parts/twitter-loading";
 import LoginPage from "@/components/login/login-page";
-import { useSession } from "next-auth/react";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  const router = useRouter();
-  const { data: session, status } = useSession();
-  useEffect(() => {
-    if (status==="authenticated") {
-      router.prefetch("/home");
-      const timer = setTimeout(() => {
-        router.push("/home");
-      }, 1000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [status, router]);
-
-  if (status !== "loading" && !session) {
-    return <LoginPage />;
+export default async function Home() {
+  const session = await auth();
+  if(session?.user){
+    redirect("/home");
   }
-
-  return <Loading />;
+  return <LoginPage/>
 }
