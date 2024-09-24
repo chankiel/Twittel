@@ -4,12 +4,12 @@ import { fetchPosts, fetchPostsFollowed } from "@/lib/actions/fetch-posts";
 import { Suspense } from "react";
 import { PostCardSkeletons } from "@/components/post/post-card";
 import { auth } from "@/auth";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
   const session = await auth();  
   if(!session?.user){
-    notFound();
+    redirect("/");
   }
   const fetchPostFollowedId = fetchPostsFollowed.bind(null, session.user.id);
   const fetchPostWithLBStatus = fetchPosts.bind(null,{selectLikeAndBookmarkFields: {

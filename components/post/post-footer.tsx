@@ -12,7 +12,6 @@ import PostAction from "./post-action";
 import { ReplyForm } from "./reply-form";
 import { PostDataFormat } from "@/lib/actions/type-data";
 import {auth} from "@/auth"
-import { notFound } from "next/navigation";
 interface PostFooterProps {
   post: PostDataFormat;
   isStatus?: boolean;
@@ -25,10 +24,7 @@ export default async function PostFooter({
   isParentStatus = false,
 }: PostFooterProps) {
   const session = await auth();
-  if(!session?.user){
-    notFound();
-  }
-  const userId = session.user.id;
+  const userId = session?.user?.id || "";
   const liked = post.likedBy.length > 0;
   const bookmarked = post.bookmarkedBy.length > 0;
   return (

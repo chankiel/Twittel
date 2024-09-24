@@ -4,7 +4,7 @@ import { PostCardSkeletons } from "@/components/post/post-card";
 import { PostCards } from "@/components/post/post-cards";
 import { TabsAll } from "@/components/post/post-tabs";
 import { fetchPosts } from "@/lib/actions/fetch-posts";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { FollowCards } from "@/components/follow-rec/followRec-card";
 
@@ -15,20 +15,37 @@ export default async function SearchPage({
     search?: string;
   };
 }) {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/");
+  }
   const query = searchParams?.search || "";
   if(query === ""){
     redirect("/explore");
   }
-  const session = await auth();
-  if (!session?.user) {
-    notFound();
-  }
   const authId = session.user.id;
 
-  const fetchMatchingPosts = fetchPosts.bind(null, {
+  const fetchRecentPosts = fetchPosts.bind(null, {
     selectLikeAndBookmarkFields: {
       where: { id: authId },
       select: { id: true },
+    },
+    where: {
+      content: {
+        contains: query,
+      },
+    },
+  });
+
+  const fetchMostLikedPosts = fetchPosts.bind(null,{
+    selectLikeAndBookmarkFields: {
+      where: { id: authId },
+      select: { id: true },
+    },
+    orderBy:{
+      likedBy:{
+        _count: 'desc',
+      }
     },
     where: {
       content: {
@@ -71,7 +88,7 @@ export default async function SearchPage({
             trigger: "Popular",
             content: (
               <Suspense fallback={<PostCardSkeletons uploadAble={true} />}>
-                <PostCards fetchFunction={fetchMatchingPosts} />
+                <PostCards fetchFunction={fetchMostLikedPosts} />
               </Suspense>
             ),
             value: "first",
@@ -81,7 +98,7 @@ export default async function SearchPage({
             content: (
               <Suspense fallback={<PostCardSkeletons uploadAble={true} />}>
                 <PostCards
-                  fetchFunction={fetchMatchingPosts}
+                  fetchFunction={fetchRecentPosts}
                 />
               </Suspense>
             ),
