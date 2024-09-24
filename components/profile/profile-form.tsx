@@ -201,7 +201,7 @@ export default function ProfileForm({
             setSubmitable={setSubmitable}
             maxLength={10}
           />
-          {isRegister && (
+          {isRegister ? (
             <>
               <InputForm
                 defaultValue={""}
@@ -217,26 +217,28 @@ export default function ProfileForm({
                 setPassword={setPassword}
               />
             </>
-          )}
-          {!isRegister && (
+          ) : (
             <>
               <InputForm
                 defaultValue={profileUser.bio ?? ""}
                 htmlName="bio"
                 errors={state.errors?.bio}
                 setSubmitable={setSubmitable}
+                maxLength={160}
               />
               <InputForm
                 defaultValue={profileUser.location ?? ""}
                 htmlName="location"
                 errors={state.errors?.location}
                 setSubmitable={setSubmitable}
+                maxLength={30}
               />
               <InputForm
                 defaultValue={profileUser.website ?? ""}
                 htmlName="website"
                 errors={state.errors?.website}
                 setSubmitable={setSubmitable}
+                maxLength={100}
               />
             </>
           )}
