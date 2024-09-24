@@ -14,7 +14,7 @@ import { signOut } from "@/lib/actions/auth";
 import { useRouter } from "next/navigation";
 
 export default function SideProfile() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [user, setUser] = useState({ username: "", addname: "", image: "" });
   const { replace } = useRouter();
 
@@ -38,6 +38,10 @@ export default function SideProfile() {
     fetchUser();
   }, [session?.user]);
 
+  if(status==="unauthenticated"){
+    return <div></div>
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="w-full items-center justify-center mt-auto mb-5 gap-2 hidden md:flex rounded-full hover:bg-gray-200 px-2">
@@ -60,6 +64,7 @@ export default function SideProfile() {
             onSubmit={async (e) => {
               e.preventDefault();
               await signOut();
+          
               setTimeout(() => {
                 replace("/");
               }, 500);

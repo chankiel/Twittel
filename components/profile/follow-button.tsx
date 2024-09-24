@@ -36,6 +36,7 @@ export default function FollowButton({
             <form action={toggleFollowWithIds}>
               <Button
                 className={`text-lg rounded-full font-extrabold border-2 border-foreground `}
+                disabled={userId===""}
               >
                 Follow
               </Button>
